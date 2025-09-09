@@ -1,28 +1,27 @@
 # PyTorch MNIST Project
 
-A clean, production-ready implementation for MNIST dataset handling, analysis, and preprocessing using PyTorch.
+A clean, optimized implementation for MNIST dataset handling using PyTorch.
 
 ## 🚀 Features
 
-- **Modular Design**: Clean class-based architecture
-- **Type Hints**: Full type annotation support
-- **Logging**: Professional logging implementation
-- **Performance Monitoring**: Built-in benchmarking
-- **Visualization**: Automated sample image generation
-- **Error Handling**: Robust exception management
+- **Simple API**: Single class handles everything
+- **Lazy Loading**: Datasets and loaders created on-demand
+- **Property-based**: Clean access via properties
+- **Minimal Dependencies**: Only essential imports
+- **Ready for ML**: Perfect foundation for neural networks
 
 ## 📁 Project Structure
 
 ```
 pytorch_learn/
-├── README.md                    # Project documentation
+├── README.md              # Project documentation
 ├── src/
-│   └── mnist_data_handler.py    # Main MNIST data handling module
-├── data/                        # MNIST dataset (auto-downloaded)
-└── .gitignore                  # Project gitignore
+│   └── mnist_handler.py   # Optimized MNIST handler
+├── data/                  # MNIST dataset (auto-downloaded)
+└── .gitignore            # Project gitignore
 ```
 
-## �️ Installation
+## 🛠️ Installation
 
 ```bash
 # Create conda environment
@@ -36,79 +35,64 @@ conda install matplotlib
 
 ## 🎯 Usage
 
-### Basic Usage
+### Quick Start
 
 ```bash
-# Run the complete MNIST analysis
-python src/mnist_data_handler.py
+python src/mnist_handler.py
 ```
 
 ### Programmatic Usage
 
 ```python
-from src.mnist_data_handler import MNISTDataLoader, DatasetAnalyzer
+from src.mnist_handler import MNIST
 
-# Initialize data loader
-loader = MNISTDataLoader(batch_size=64)
+# Initialize handler
+mnist = MNIST(batch_size=64)
 
-# Load datasets
-train_dataset, test_dataset = loader.load_datasets()
+# Access datasets and loaders
+train_loader = mnist.train_loader
+test_loader = mnist.test_loader
 
-# Create data loaders
-train_loader, test_loader = loader.create_data_loaders()
+# Get sample batch
+images, labels = mnist.sample_batch()
 
-# Analyze dataset
-analysis = DatasetAnalyzer.analyze_dataset(train_dataset)
-print(f"Dataset contains {analysis['total_samples']} samples")
+# Show dataset info
+info = mnist.info()
 ```
 
-## 📊 What It Does
+## 📊 What It Provides
 
-### ✅ **System Verification**
-- PyTorch installation check
-- CUDA availability detection
-- Version information display
+- **Dataset Loading**: Automatic MNIST download and preprocessing
+- **Data Loaders**: Efficient batched loading for training
+- **Visualization**: Sample image grid generation  
+- **Info**: Quick dataset statistics
 
-### ✅ **Dataset Management**
-- Automatic MNIST download
-- Configurable preprocessing pipelines
-- Efficient data loader creation
+## 🔧 Key Features
 
-### ✅ **Data Analysis**
-- Comprehensive dataset statistics
-- Tensor property analysis
-- Performance benchmarking
+### Simple API
+```python
+mnist = MNIST()
+train_loader = mnist.train_loader  # Lazy loaded
+images, labels = mnist.sample_batch()
+```
 
-### ✅ **Visualization**
-- Sample image grid generation
-- Automated plot saving
-- Clean matplotlib integration
+### Efficient Design
+- Lazy loading (only loads when needed)
+- Property-based access
+- Minimal memory footprint
+- Standard preprocessing pipeline
 
-## 🔧 Technical Details
+### Ready for Neural Networks
+The handler provides exactly what you need for training:
+- Normalized tensors (-1 to 1 range)
+- Proper batch dimensions
+- Shuffled training data
+- Consistent preprocessing
 
-### Classes
-
-- **`MNISTDataLoader`**: Handles dataset loading and data loader creation
-- **`DatasetAnalyzer`**: Provides analysis and visualization utilities
-- **`SystemInfo`**: System and environment information
-
-### Key Features
-
-- **Type Safety**: Full type hints for better IDE support
-- **Logging**: Structured logging with timestamps
-- **Modularity**: Reusable components for other projects
-- **Performance**: Optimized data loading with benchmarking
-
-## � Performance
-
-- **Data Loading**: ~27,000 images/second
-- **Memory Efficient**: Lazy loading with configurable batch sizes
-- **CPU Optimized**: Works efficiently without GPU
-
-## 🎓 Next Steps
+## 📈 Next Steps
 
 This foundation enables:
-- Neural network development
-- Custom model training
-- Experiment tracking
-- Advanced preprocessing pipelines
+- Building neural networks
+- Training on MNIST
+- Experimenting with architectures
+- Adding custom preprocessing

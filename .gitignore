@@ -125,11 +125,7 @@ dmypy.json
 .pyre/
 
 ## PyTorch specific
-data/
-*.pth
-*.pt
-checkpoints/
-models/
+data/MNIST/  # Only ignore downloaded dataset, not the data directory itself
 logs/
 
 ## IDE
@@ -162,8 +158,3 @@ logs/
 Network Trash Folder
 Temporary Items
 .apdisk
-
-## Generated images
-*.png
-*.jpg
-*.jpeg

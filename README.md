@@ -33,10 +33,22 @@ pytorch_learn/
 **Option 1: Run complete pipeline demo:**
 
 ```bash
-# Setup environment
-conda create -n pytorch_learn_env python=3.8
+# Setup environment (Python 3.12 + latest PyTorch)
+conda env create -f environment.yml
 conda activate pytorch_learn_env
-conda install pytorch torchvision matplotlib
+
+# Run everything at once
+python run_demo.py
+```
+
+**Alternative setup:**
+
+```bash
+# Manual environment setup
+conda create -n pytorch_learn_env python=3.12
+conda activate pytorch_learn_env
+conda install pytorch torchvision torchaudio cpuonly -c pytorch
+conda install matplotlib pandas scikit-learn seaborn
 
 # Run everything at once
 python run_demo.py
@@ -130,9 +142,32 @@ This project demonstrates:
 
 Perfect for understanding both **recognition** and **creation** in deep learning!
 
+## Environment & Dependencies
+
+This project uses the latest stable versions:
+
+- **Python**: 3.12.11 (latest stable)
+- **PyTorch**: 2.2.2 (with CPU optimization)
+- **NumPy**: 1.26.4 (compatible with PyTorch)
+- **Matplotlib**: 3.10.5
+- **Pandas**: 2.3.2
+- **Scikit-learn**: 1.7.1
+
+### Environment Setup
+
+The project includes a complete `environment.yml` file for easy reproduction:
+
+```bash
+conda env create -f environment.yml
+conda activate pytorch_learn_env
+```
+
+This ensures identical dependencies and versions across different machines.
+
 ## Next Steps
 
 - Experiment with different architectures
 - Try conditional generation (specify which digit to generate)
 - Implement more advanced GANs
 - Apply to other datasets (CIFAR-10, Fashion-MNIST)
+- Upgrade to newer PyTorch versions for latest features

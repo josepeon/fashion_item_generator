@@ -10,7 +10,7 @@ A clean, complete PyTorch project demonstrating both **classification** and **ge
 
 ## Project Structure
 
-```
+```text
 pytorch_learn/
 ├── README.md                    # This file
 ├── run_demo.py                  # Complete pipeline demo
@@ -76,12 +76,14 @@ python src/evaluate_models.py
 ## Technical Implementation
 
 ### Core PyTorch Concepts
+
 - Building neural networks with `nn.Module`
 - Training loops with backpropagation
 - Data loading with `DataLoader`
 - Model saving and loading
 
 ### Advanced Techniques
+
 - **CNN Architecture**: Convolutional layers, pooling, dropout
 - **VAE Generation**: Latent space, encoder-decoder, reparameterization
 - **Model Evaluation**: Using one model to evaluate another
@@ -89,25 +91,30 @@ python src/evaluate_models.py
 ## Architecture Details
 
 ### CNN Classifier Architecture
-```
+
+```text
 Input (28×28) → Conv(32) → Conv(64) → Conv(128) → FC(512) → FC(10)
 ```
+
 - 688,138 parameters
 - Dropout regularization
 - Adam optimizer
 
-### VAE Generator Architecture  
-```
+### VAE Generator Architecture
+
+```text
 Encoder: 784 → 400 → 200 → latent(20)
 Decoder: latent(20) → 200 → 400 → 784
 ```
+
 - 801,224 parameters
 - Latent space dimension: 20
 - Generates from random noise
 
-##  Generated Examples
+## Generated Examples
 
 The VAE successfully generates digit-like images that:
+
 - **75% achieve high confidence** (>0.7) from our CNN classifier
 - **93.8% are recognizable** as valid digits
 - **Show clear digit patterns** across all 10 classes (0-9)
@@ -115,6 +122,7 @@ The VAE successfully generates digit-like images that:
 ## 🎓 Educational Value
 
 This project demonstrates:
+
 1. **Discriminative AI**: Learning to classify existing data
 2. **Generative AI**: Learning to create new data
 3. **Model Evaluation**: Using one AI to judge another
@@ -122,7 +130,7 @@ This project demonstrates:
 
 Perfect for understanding both **recognition** and **creation** in deep learning!
 
-##  Next Steps
+## Next Steps
 
 - Experiment with different architectures
 - Try conditional generation (specify which digit to generate)

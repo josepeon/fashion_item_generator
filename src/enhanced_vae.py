@@ -442,7 +442,7 @@ class EnhancedVAETrainer:
                 self.best_loss = val_metrics['loss']
                 self.patience_counter = 0
                 torch.save(self.model.state_dict(), save_path)
-                print(f"  ✅ Best model saved (loss: {self.best_loss:.2f})")
+                print(f"  Best model saved (loss: {self.best_loss:.2f})")
             else:
                 self.patience_counter += 1
             
@@ -465,7 +465,7 @@ class EnhancedVAETrainer:
 
 def run_enhanced_training():
     """Run enhanced VAE training with superior generation quality."""
-    print("🚀 Starting Enhanced VAE Training for Superior Generation Quality")
+    print("Starting Enhanced VAE Training for Superior Generation Quality")
     print("=" * 70)
     
     # Load MNIST data
@@ -488,7 +488,7 @@ def run_enhanced_training():
             cnn_classifier.load_state_dict(
                 torch.load('models/best_mnist_cnn.pth', map_location=trainer.device)
             )
-            print("✅ CNN classifier loaded for quality evaluation")
+            print("CNN classifier loaded for quality evaluation")
         else:
             cnn_classifier = None
     except:
@@ -504,7 +504,7 @@ def run_enhanced_training():
     )
     
     print("\n🎉 Enhanced VAE Training Complete!")
-    print("📊 Generating quality assessment...")
+    print("Generating quality assessment...")
     
     # Final quality assessment
     if cnn_classifier is not None:
@@ -512,7 +512,7 @@ def run_enhanced_training():
         print(f"Final generation quality: {final_quality:.3f}")
         
         # Generate sample images for each digit
-        print("🎨 Generating sample images...")
+        print("Generating sample images...")
         fig, axes = plt.subplots(2, 10, figsize=(15, 3))
         
         for digit in range(10):

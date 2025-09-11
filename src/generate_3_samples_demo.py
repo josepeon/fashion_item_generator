@@ -175,7 +175,7 @@ def create_quality_summary(all_qualities):
     good = sum(1 for s in all_scores if 0.8 <= s < 0.9)
     fair = sum(1 for s in all_scores if s < 0.8)
     
-    print(f"\n📈 Quality Distribution:")
+    print(f"Quality Distribution:")
     print(f"  Excellent (≥95%): {excellent}/30 ({excellent/30:.1%})")
     print(f"  Very Good (90-95%): {very_good}/30 ({very_good/30:.1%})")
     print(f"  Good (80-90%): {good}/30 ({good/30:.1%})")
@@ -183,16 +183,16 @@ def create_quality_summary(all_qualities):
     
     # Achievement assessment
     target_achievement = np.mean(all_scores)
-    print(f"\n🏆 Achievement Assessment:")
+    print(f"Achievement Assessment:")
     if target_achievement >= 0.98:
         print(f"  TARGET EXCEEDED: {target_achievement:.1%} (Target: 98%)")
         print(f"  Mission accomplished.")
     elif target_achievement >= 0.95:
         print(f"  VERY CLOSE: {target_achievement:.1%} (Target: 98%)")
-        print(f"  📈 Gap: {0.98 - target_achievement:.1%}")
+        print(f"  Gap: {0.98 - target_achievement:.1%}")
     else:
         print(f"  GOOD PROGRESS: {target_achievement:.1%} (Target: 98%)")
-        print(f"  📈 Gap: {0.98 - target_achievement:.1%}")
+        print(f"  Gap: {0.98 - target_achievement:.1%}")
 
 def main():
     """Main generation and display pipeline"""
@@ -209,15 +209,15 @@ def main():
         print(f"FINAL SUMMARY:")
         print(f"  Generated 30 samples (3 per digit)")
         print(f"  Average quality: {avg_quality:.1%}")
-        print(f"  🏆 High quality samples: {high_quality_count}/30")
-        print(f"  ⭐ Perfect samples: {perfect_count}/30")
-        print(f"  📁 Saved to: results/3_samples_per_digit_quality_demo.png")
+        print(f"  High quality samples: {high_quality_count}/30")
+        print(f"  Perfect samples: {perfect_count}/30")
+        print(f"  Saved to: results/3_samples_per_digit_quality_demo.png")
         
         if avg_quality >= 0.98:
             print(f"ACHIEVEMENT: 98%+ Quality Target Reached.")
         
     except Exception as e:
-        print(f"❌ Error during generation: {e}")
+        print(f"Error during generation: {e}")
         import traceback
         traceback.print_exc()
 

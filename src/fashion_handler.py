@@ -1,7 +1,7 @@
 """
-MNIST Dataset Handler - Optimized and Concise
+Fashion-MNIST Dataset Handler - Optimized and Concise
 
-Clean, minimal implementation for MNIST dataset operations.
+Clean, minimal implementation for Fashion-MNIST dataset operations.
 """
 
 import torch
@@ -11,14 +11,20 @@ import matplotlib.pyplot as plt
 from typing import Tuple
 
 
-class MNIST:
-    """Simple, efficient MNIST dataset handler."""
+class FashionMNIST:
+    """Simple, efficient Fashion-MNIST dataset handler."""
+    
+    # Fashion-MNIST class names
+    CLASS_NAMES = [
+        'T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
+        'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot'
+    ]
     
     def __init__(self, data_dir: str = './data', batch_size: int = 64):
         self.data_dir = data_dir
         self.batch_size = batch_size
         
-        # Standard MNIST preprocessing
+        # Standard Fashion-MNIST preprocessing
         self.transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.5,), (0.5,))
@@ -30,19 +36,19 @@ class MNIST:
         self._test_loader = None
     
     @property
-    def train_dataset(self) -> datasets.MNIST:
+    def train_dataset(self) -> datasets.FashionMNIST:
         """Lazy load training dataset."""
         if self._train_dataset is None:
-            self._train_dataset = datasets.MNIST(
+            self._train_dataset = datasets.FashionMNIST(
                 root=self.data_dir, train=True, download=True, transform=self.transform
             )
         return self._train_dataset
     
     @property
-    def test_dataset(self) -> datasets.MNIST:
+    def test_dataset(self) -> datasets.FashionMNIST:
         """Lazy load test dataset."""
         if self._test_dataset is None:
-            self._test_dataset = datasets.MNIST(
+            self._test_dataset = datasets.FashionMNIST(
                 root=self.data_dir, train=False, download=True, transform=self.transform
             )
         return self._test_dataset
@@ -71,14 +77,14 @@ class MNIST:
     
     def visualize_samples(self, num_samples: int = 8, save_path: str = None) -> None:
         """Create visualization of sample images."""
-        fig, axes = plt.subplots(2, 4, figsize=(10, 5))
-        fig.suptitle('MNIST Sample Digits', fontweight='bold')
+        fig, axes = plt.subplots(2, 4, figsize=(12, 6))
+        fig.suptitle('Fashion-MNIST Sample Items', fontweight='bold')
         
         for i in range(num_samples):
             image, label = self.train_dataset[i]
             row, col = i // 4, i % 4
             axes[row, col].imshow(image.squeeze(), cmap='gray')
-            axes[row, col].set_title(f'{label}')
+            axes[row, col].set_title(f'{self.CLASS_NAMES[label]}')
             axes[row, col].axis('off')
         
         plt.tight_layout()
@@ -94,33 +100,38 @@ class MNIST:
             'train_samples': len(self.train_dataset),
             'test_samples': len(self.test_dataset),
             'classes': len(self.train_dataset.classes),
+            'class_names': self.CLASS_NAMES,
             'image_shape': self.train_dataset[0][0].shape,
             'batch_size': self.batch_size
         }
 
 
 def main():
-    """Demo the MNIST handler."""
-    print("PyTorch MNIST Handler")
+    """Demo the Fashion-MNIST handler."""
+    print("PyTorch Fashion-MNIST Handler")
     print(f"PyTorch version: {torch.__version__}")
     print(f"CUDA available: {torch.cuda.is_available()}")
     
-    # Initialize MNIST handler
-    mnist = MNIST(batch_size=64)
+    # Initialize Fashion-MNIST handler
+    fashion = FashionMNIST(batch_size=64)
     
     # Show info
-    info = mnist.info()
+    info = fashion.info()
     print(f"\nDataset Info:")
     for key, value in info.items():
-        print(f"  {key}: {value}")
+        if key == 'class_names':
+            print(f"  {key}: {', '.join(value)}")
+        else:
+            print(f"  {key}: {value}")
     
     # Create visualization
-    mnist.visualize_samples(save_path='mnist_samples.png')
+    fashion.visualize_samples(save_path='fashion_samples.png')
     
     # Test data loading
-    batch_images, batch_labels = mnist.sample_batch()
+    batch_images, batch_labels = fashion.sample_batch()
     print(f"\nBatch loaded: {batch_images.shape}")
     print(f"Sample labels: {batch_labels[:8].tolist()}")
+    print(f"Sample items: {[fashion.CLASS_NAMES[i] for i in batch_labels[:8]]}")
     
     print("\nReady for model training!")
 

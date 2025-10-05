@@ -1,7 +1,7 @@
 """
-MNIST CNN Model - Convolutional Neural Network
+Fashion-MNIST CNN Model - Convolutional Neural Network
 
-A clean, efficient CNN implementation for MNIST digit classification.
+A clean, efficient CNN implementation for Fashion-MNIST item classification.
 """
 
 import torch
@@ -13,14 +13,14 @@ import matplotlib.pyplot as plt
 from typing import Tuple, List
 import time
 
-from mnist_handler import MNIST
+from fashion_handler import FashionMNIST
 
 
-class MNISTNet(nn.Module):
-    """Convolutional Neural Network for MNIST classification."""
+class FashionNet(nn.Module):
+    """Convolutional Neural Network for Fashion-MNIST classification."""
     
     def __init__(self):
-        super(MNISTNet, self).__init__()
+        super(FashionNet, self).__init__()
         
         # Convolutional layers
         self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)    # 28x28 -> 28x28
@@ -36,7 +36,7 @@ class MNISTNet(nn.Module):
         
         # Fully connected layers
         self.fc1 = nn.Linear(128 * 3 * 3, 512)  # 128 channels * 3x3 after pooling
-        self.fc2 = nn.Linear(512, 10)           # 10 output classes (digits 0-9)
+        self.fc2 = nn.Linear(512, 10)           # 10 output classes (fashion items)
     
     def forward(self, x):
         """Forward pass through the network."""
@@ -198,9 +198,13 @@ class CNNTrainer:
             outputs = self.model(images)
             _, predicted = torch.max(outputs, 1)
         
+        # Get class names for better visualization
+        fashion = FashionMNIST()
+        class_names = fashion.CLASS_NAMES
+        
         # Plot predictions
-        fig, axes = plt.subplots(2, 4, figsize=(10, 5))
-        fig.suptitle('CNN Predictions', fontweight='bold')
+        fig, axes = plt.subplots(2, 4, figsize=(12, 6))
+        fig.suptitle('CNN Predictions on Fashion Items', fontweight='bold')
         
         for i in range(num_samples):
             image = images[i].cpu().squeeze()
@@ -212,7 +216,8 @@ class CNNTrainer:
             
             # Color code: green if correct, red if wrong
             color = 'green' if true_label == pred_label else 'red'
-            axes[row, col].set_title(f'True: {true_label}, Pred: {pred_label}', color=color)
+            axes[row, col].set_title(f'True: {class_names[true_label]}\nPred: {class_names[pred_label]}', 
+                                   color=color, fontsize=9)
             axes[row, col].axis('off')
         
         plt.tight_layout()
@@ -222,18 +227,18 @@ class CNNTrainer:
 
 def main():
     """Main training pipeline."""
-    print("MNIST CNN Training Pipeline")
+    print("Fashion-MNIST CNN Training Pipeline")
     print("=" * 40)
     
     # Initialize data
-    mnist = MNIST(batch_size=128)  # Larger batch size for CNN
-    train_loader = mnist.train_loader
-    test_loader = mnist.test_loader
+    fashion = FashionMNIST(batch_size=128)  # Larger batch size for CNN
+    train_loader = fashion.train_loader
+    test_loader = fashion.test_loader
     
-    print(f"Dataset loaded: {mnist.info()}")
+    print(f"Dataset loaded: {fashion.info()}")
     
     # Create model
-    model = MNISTNet()
+    model = FashionNet()
     trainer = CNNTrainer(model)
     
     # Train model
@@ -247,8 +252,8 @@ def main():
     trainer.predict_samples(test_loader)
     
     # Save model
-    torch.save(model.state_dict(), 'mnist_cnn.pth')
-    print("Model saved to mnist_cnn.pth")
+    torch.save(model.state_dict(), 'fashion_cnn.pth')
+    print("Model saved to fashion_cnn.pth")
 
 
 if __name__ == "__main__":

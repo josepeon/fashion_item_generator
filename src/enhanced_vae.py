@@ -1,12 +1,12 @@
 """
-Enhanced VAE for Superior MNIST Generation
+Enhanced VAE for Superior Fashion-MNIST Generation
 
 Advanced Variational Autoencoder with:
 - Deeper architecture with residual connections
 - Conditional generation capabilities
 - Advanced loss functions (β-VAE, spectral regularization)
 - Progressive training strategies
-- Higher quality image generation
+- Higher quality fashion item generation
 """
 
 import torch
@@ -22,7 +22,7 @@ import os
 from datetime import datetime
 import math
 
-from mnist_handler import MNIST
+from fashion_handler import FashionMNIST
 
 
 class ResidualBlock(nn.Module):
@@ -468,8 +468,8 @@ def run_enhanced_training():
     print("Starting Enhanced VAE Training for Superior Generation Quality")
     print("=" * 70)
     
-    # Load MNIST data
-    mnist = MNIST(batch_size=128)
+    # Load Fashion-MNIST data
+    fashion = FashionMNIST(batch_size=128)
     
     # Create enhanced trainer
     trainer = EnhancedVAETrainer(
@@ -496,8 +496,8 @@ def run_enhanced_training():
     
     # Train the model
     history = trainer.train(
-        train_loader=mnist.train_loader,
-        val_loader=mnist.test_loader,
+        train_loader=fashion.train_loader,
+        val_loader=fashion.test_loader,
         epochs=300,  # Extended training
         cnn_classifier=cnn_classifier,
         save_path='models/enhanced_vae_superior.pth'

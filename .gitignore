@@ -1,4 +1,4 @@
-# PyTorch Learning Project
+# Fashion-MNIST VAE Generator Project
 
 ## Byte-compiled / optimized / DLL files
 __pycache__/
@@ -125,8 +125,31 @@ dmypy.json
 .pyre/
 
 ## PyTorch specific
-data/MNIST/  # Only ignore downloaded dataset, not the data directory itself
+*.pth
+*.pt
+*.pkl
+*.pickle
+
+## Dataset files (Fashion-MNIST and MNIST will be auto-downloaded)
+data/MNIST/
+data/FashionMNIST/raw/
+data/FashionMNIST/processed/
+
+## Machine Learning outputs
 logs/
+runs/
+mlruns/
+wandb/
+
+## Results (keep structure but ignore large generated files)
+results/*.png
+results/*.jpg
+results/*.jpeg
+!results/.gitkeep
+
+## Model training outputs
+optimization_log.json
+training_history.png
 
 ## IDE
 .vscode/

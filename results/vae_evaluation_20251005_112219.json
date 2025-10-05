@@ -1,0 +1,16 @@
+{
+  "reconstruction": {
+    "mse_loss": 1.6982839107513428,
+    "avg_ssim": -0.020291496068239212,
+    "reconstruction_quality": 0.014169225469231606
+  },
+  "generation": {
+    "diversity": 9.493086814880371,
+    "avg_quality": 0.5
+  },
+  "interpolation": {},
+  "overall_score": 0.004723075311630964,
+  "model_path": "models/simple_vae.pth",
+  "timestamp": "20251005_112219",
+  "grade": "D - NEEDS IMPROVEMENT"
+}

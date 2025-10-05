@@ -1,0 +1,31 @@
+{
+  "reconstruction": {
+    "mse_loss": 0.8054718375205994,
+    "avg_ssim": -0.051276758313179016,
+    "reconstruction_quality": -0.009974773973226547
+  },
+  "generation": {
+    "diversity": 9.044672966003418,
+    "avg_quality": 0.2909503862261772,
+    "class_qualities": [
+      0.28966522216796875,
+      0.34709298610687256,
+      0.3149738311767578,
+      0.2866996228694916,
+      0.2967209815979004,
+      0.24420486390590668,
+      0.27672094106674194,
+      0.2666529417037964,
+      0.30101150274276733,
+      0.2857609689235687
+    ],
+    "generation_score": 2.631551092748158
+  },
+  "interpolation": {
+    "interpolation_smoothness": 0.0020484249107539654
+  },
+  "overall_score": 1.2065092979547258,
+  "model_path": "models/enhanced_vae_superior.pth",
+  "timestamp": "20251005_112208",
+  "grade": "A - EXCELLENT"
+}

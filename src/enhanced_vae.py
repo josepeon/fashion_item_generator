@@ -512,8 +512,8 @@ def run_enhanced_training():
     
     # Train the model
     history = trainer.train(
-        train_loader=fashion.train_loader,
-        val_loader=fashion.test_loader,
+        train_loader=fashion.get_train_loader(),
+        val_loader=fashion.get_test_loader(),
         epochs=300,  # Extended training
         cnn_classifier=cnn_classifier,
         save_path='models/enhanced_vae_superior.pth'

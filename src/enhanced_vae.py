@@ -174,11 +174,19 @@ class EnhancedVAE(nn.Module):
             return generated.view(num_samples, 1, 28, 28)
     
     def generate_specific_digits(self, digit: int, num_samples: int, device: str = 'cpu') -> torch.Tensor:
-        """Generate samples of a specific digit."""
+        """Generate samples of a specific digit (legacy method name)."""
         if not self.conditional:
             raise ValueError("Model must be conditional to generate specific digits")
         
         labels = torch.full((num_samples,), digit, dtype=torch.long, device=device)
+        return self.generate(num_samples, labels, device)
+    
+    def generate_fashion_class(self, fashion_class: int, num_samples: int, device: str = 'cpu') -> torch.Tensor:
+        """Generate samples of a specific fashion class."""
+        if not self.conditional:
+            raise ValueError("Model must be conditional to generate specific fashion classes")
+        
+        labels = torch.full((num_samples,), fashion_class, dtype=torch.long, device=device)
         return self.generate(num_samples, labels, device)
 
 
@@ -193,7 +201,15 @@ class EnhancedVAETrainer:
         lr: float = 1e-3,
         device: str = None
     ):
-        self.device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
+        # Optimal device selection for performance
+        if device:
+            self.device = device
+        elif torch.cuda.is_available():
+            self.device = 'cuda'
+        elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+            self.device = 'mps'  # Apple Silicon GPU
+        else:
+            self.device = 'cpu'
         self.latent_dim = latent_dim
         self.conditional = conditional
         self.beta = beta  # β-VAE parameter for disentanglement

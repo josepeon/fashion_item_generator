@@ -7,6 +7,7 @@ Clean, minimal implementation for Fashion-MNIST dataset operations.
 import torch
 import torchvision.transforms as transforms
 from torchvision import datasets
+from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 from typing import Tuple
 
@@ -53,21 +54,37 @@ class FashionMNIST:
             )
         return self._test_dataset
     
-    @property
-    def train_loader(self) -> torch.utils.data.DataLoader:
-        """Get training data loader."""
+    def get_train_loader(self):
+        """Get training data loader with optimized settings."""
         if self._train_loader is None:
-            self._train_loader = torch.utils.data.DataLoader(
-                self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=0
+            # Optimize workers and memory based on system
+            has_gpu = torch.cuda.is_available() or (hasattr(torch.backends, 'mps') and torch.backends.mps.is_available())
+            num_workers = 4 if has_gpu else 2  # Reduce workers on CPU-only systems
+            
+            self._train_loader = DataLoader(
+                self.train_dataset, 
+                batch_size=self.batch_size, 
+                shuffle=True, 
+                num_workers=num_workers,
+                pin_memory=has_gpu,  # Only pin memory if we have GPU
+                persistent_workers=num_workers > 0
             )
         return self._train_loader
     
-    @property
-    def test_loader(self) -> torch.utils.data.DataLoader:
-        """Get test data loader."""
+    def get_test_loader(self):
+        """Get test data loader with optimized settings."""
         if self._test_loader is None:
-            self._test_loader = torch.utils.data.DataLoader(
-                self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=0
+            # Optimize workers and memory based on system
+            has_gpu = torch.cuda.is_available() or (hasattr(torch.backends, 'mps') and torch.backends.mps.is_available())
+            num_workers = 4 if has_gpu else 2  # Reduce workers on CPU-only systems
+            
+            self._test_loader = DataLoader(
+                self.test_dataset, 
+                batch_size=self.batch_size, 
+                shuffle=False, 
+                num_workers=num_workers,
+                pin_memory=has_gpu,  # Only pin memory if we have GPU
+                persistent_workers=num_workers > 0
             )
         return self._test_loader
     

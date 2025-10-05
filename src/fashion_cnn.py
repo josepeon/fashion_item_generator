@@ -68,7 +68,15 @@ class CNNTrainer:
     
     def __init__(self, model: nn.Module, device: str = None):
         self.model = model
-        self.device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
+        # Optimal device selection for performance
+        if device:
+            self.device = device
+        elif torch.cuda.is_available():
+            self.device = 'cuda'
+        elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+            self.device = 'mps'  # Apple Silicon GPU
+        else:
+            self.device = 'cpu'
         self.model.to(self.device)
         
         # Training components

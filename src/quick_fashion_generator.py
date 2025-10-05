@@ -102,7 +102,13 @@ class QuickTrainer:
     def __init__(self, model: VAEGenerator, lr: float = 1e-3):
         self.model = model
         self.optimizer = optim.Adam(model.parameters(), lr=lr)
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        # Optimal device selection for performance
+        if torch.cuda.is_available():
+            self.device = 'cuda'
+        elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+            self.device = 'mps'  # Apple Silicon GPU
+        else:
+            self.device = 'cpu'
         self.model.to(self.device)
         
         self.train_losses = []

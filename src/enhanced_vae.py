@@ -228,7 +228,7 @@ class EnhancedVAETrainer:
         
         # Learning rate schedulers
         self.scheduler_plateau = ReduceLROnPlateau(
-            self.optimizer, mode='min', factor=0.5, patience=10, verbose=True
+            self.optimizer, mode='min', factor=0.5, patience=10
         )
         self.scheduler_cosine = CosineAnnealingLR(
             self.optimizer, T_max=50, eta_min=1e-6

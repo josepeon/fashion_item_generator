@@ -1,0 +1,22 @@
+{
+  "model_path": "models/superior_vae_ultimate.pth",
+  "timestamp": "2025-10-05T13:54:04.321079",
+  "device": "mps",
+  "total_parameters": 33513370,
+  "recon_mse": 0.05281580053269863,
+  "recon_mae": 0.11667116805911064,
+  "recon_correlation": 0.917823976278305,
+  "recon_quality_score": 0.9067088378220796,
+  "gen_diversity": 13.669301494481612,
+  "gen_diversity_std": 4.1687741472622895,
+  "gen_visual_quality": 0.5693536996841431,
+  "gen_quality_score": 7.1193275970828775,
+  "latent_smoothness": 0.8750421675530605,
+  "interpolation_quality": 0.8354468849533868,
+  "latent_score": 0.8552445262532237,
+  "class_separation": 1.3514094225565594,
+  "class_consistency": 0.113629678394829,
+  "conditional_score": 0.7325195504756942,
+  "overall_score": 2.7166542814499515,
+  "grade": "A+ - EXCEPTIONAL"
+}

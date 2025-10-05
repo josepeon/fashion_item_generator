@@ -3,11 +3,27 @@ channels:
   - pytorch
   - conda-forge
   - defaults
+
 dependencies:
+  # Python runtime
   - python=3.12
-  - pytorch
-  - torchvision
-  - numpy
-  - matplotlib
-  - pillow
+  
+  # Core ML/DL framework (with Apple Silicon support)
+  - pytorch>=2.0.0
+  - torchvision>=0.15.0
+  
+  # Scientific computing
+  - numpy>=1.24.0
+  
+  # Visualization and plotting
+  - matplotlib>=3.7.0
+  
+  # Image processing
+  - pillow>=10.0.0
+  
+  # Package management
   - pip
+  
+  # Optional: Enhanced evaluation metrics
+  - pip:
+    - scikit-learn>=1.3.0

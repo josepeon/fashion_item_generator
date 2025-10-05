@@ -240,8 +240,8 @@ def main():
     
     # Initialize data
     fashion = FashionMNIST(batch_size=128)  # Larger batch size for CNN
-    train_loader = fashion.train_loader
-    test_loader = fashion.test_loader
+    train_loader = fashion.get_train_loader()
+    test_loader = fashion.get_test_loader()
     
     print(f"Dataset loaded: {fashion.info()}")
     

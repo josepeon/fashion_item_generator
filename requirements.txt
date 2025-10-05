@@ -1,0 +1,11 @@
+# Fashion-MNIST Project Requirements
+# 
+# This project uses a Python virtual environment.
+# Install dependencies with:
+#   pip install -r requirements.txt
+
+torch>=2.8.0
+torchvision>=0.23.0
+numpy>=2.3.0
+matplotlib>=3.10.0
+pillow>=11.3.0

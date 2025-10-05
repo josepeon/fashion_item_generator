@@ -32,8 +32,8 @@ def generate_quality_samples():
     evaluator = FashionNet().to(device)
     
     # Load weights
-    model.load_state_dict(torch.load('models/enhanced_vae_superior.pth', map_location=device))
-    evaluator.load_state_dict(torch.load('models/best_fashion_cnn.pth', map_location=device))
+    model.load_state_dict(torch.load('../models/enhanced_vae_superior.pth', map_location=device))
+    evaluator.load_state_dict(torch.load('../models/best_fashion_cnn_100epochs.pth', map_location=device))
     
     model.eval()
     evaluator.eval()
@@ -205,8 +205,8 @@ def main():
     except FileNotFoundError as e:
         print(f"❌ Error: Model file not found - {e}")
         print("Please ensure the model files exist:")
-        print("  - models/enhanced_vae_superior.pth")
-        print("  - models/best_fashion_cnn.pth")
+        print("  - ../models/enhanced_vae_superior.pth")
+        print("  - ../models/best_fashion_cnn_100epochs.pth")
         return None
     except Exception as e:
         print(f"❌ Error during generation: {e}")

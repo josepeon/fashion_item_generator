@@ -134,6 +134,7 @@ dmypy.json
 data/MNIST/
 data/FashionMNIST/raw/
 data/FashionMNIST/processed/
+src/data/
 
 ## Machine Learning outputs
 logs/

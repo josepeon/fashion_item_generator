@@ -482,11 +482,11 @@ def run_enhanced_training():
     # Load CNN classifier for quality evaluation
     cnn_classifier = None
     try:
-        from mnist_cnn import MNISTNet
-        cnn_classifier = MNISTNet().to(trainer.device)
-        if os.path.exists('models/best_mnist_cnn.pth'):
+        from fashion_cnn import FashionNet
+        cnn_classifier = FashionNet().to(trainer.device)
+        if os.path.exists('models/best_fashion_cnn.pth'):
             cnn_classifier.load_state_dict(
-                torch.load('models/best_mnist_cnn.pth', map_location=trainer.device)
+                torch.load('models/best_fashion_cnn.pth', map_location=trainer.device)
             )
             print("CNN classifier loaded for quality evaluation")
         else:

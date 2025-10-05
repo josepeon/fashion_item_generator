@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-Simple Enhanced VAE Quality Boost
-================================
+Simple Enhanced Fashion VAE Quality Boost
+========================================
 
-A simplified approach to improve the Enhanced VAE quality by:
-1. Better latent space sampling
-2. Quality-guided generation
+A simplified approach to improve the Enhanced Fashion VAE quality by:
+1. Better latent sp            class_results[class_idx] = {
+                'accuracy': np.mean(accuracies),
+                'confidence': np.mean(confidences),
+                'samples': class_samples
+            }ampling
+2. Quality-guided generation for fashion items
 3. Model ensemble for final generation
 """
 
@@ -19,7 +23,8 @@ from datetime import datetime
 import sys
 sys.path.append(os.path.dirname(__file__))
 from enhanced_vae import EnhancedVAE
-from mnist_cnn import MNISTNet
+from fashion_cnn import FashionNet
+from fashion_handler import FashionMNIST
 
 class SimpleQualityBoost:
     """Simple but effective quality improvement"""
@@ -37,13 +42,13 @@ class SimpleQualityBoost:
         self.model.load_state_dict(torch.load('models/enhanced_vae_superior.pth', map_location=self.device))
         self.model.eval()
         
-        self.evaluator = MNISTNet().to(self.device)
-        self.evaluator.load_state_dict(torch.load('models/best_mnist_cnn.pth', map_location=self.device))
+        self.evaluator = FashionNet().to(self.device)
+        self.evaluator.load_state_dict(torch.load('models/best_fashion_cnn.pth', map_location=self.device))
         self.evaluator.eval()
         
         print("Models loaded successfully")
     
-    def quality_guided_sampling(self, digit, num_candidates=200, top_k=5):
+    def quality_guided_sampling(self, fashion_class, num_candidates=200, top_k=5):
         """Generate multiple candidates and select the best ones"""
         candidates = []
         scores = []
@@ -51,11 +56,14 @@ class SimpleQualityBoost:
         with torch.no_grad():
             for _ in range(num_candidates):
                 # Sample from latent space with slight variations
-                z = torch.randn(1, 32, device=self.device)
-                labels = torch.tensor([digit], device=self.device)
-                
-                # Generate sample
-                generated = self.model.decode(z, labels)
+                for _ in range(num_candidates):
+                    # Basic generation
+                    with torch.no_grad():
+                        z = torch.randn(1, 32, device=self.device)
+                        labels = torch.tensor([fashion_class], device=self.device)
+                        
+                        # Generate sample
+                        generated = self.model.decode(z, labels)
                 
                 # Evaluate quality
                 generated_4d = generated.view(1, 1, 28, 28)
@@ -65,7 +73,7 @@ class SimpleQualityBoost:
                 # Quality score = confidence × correctness
                 confidence = probs.max(dim=1)[0].item()
                 predicted = outputs.argmax(dim=1).item()
-                correctness = 1.0 if predicted == digit else 0.3  # Penalty for wrong prediction
+                correctness = 1.0 if predicted == fashion_class else 0.3  # Penalty for wrong prediction
                 
                 quality_score = confidence * correctness
                 
@@ -79,11 +87,11 @@ class SimpleQualityBoost:
         
         return top_samples, top_scores
     
-    def iterative_latent_optimization(self, digit, num_iterations=50):
+    def iterative_latent_optimization(self, fashion_class, num_iterations=50):
         """Optimize latent code iteratively for better quality"""
         # Start with random latent code
         z = torch.randn(1, 32, device=self.device, requires_grad=True)
-        labels = torch.tensor([digit], device=self.device)
+        labels = torch.tensor([fashion_class], device=self.device)
         
         optimizer = torch.optim.Adam([z], lr=0.01)
         
@@ -102,7 +110,7 @@ class SimpleQualityBoost:
             probs = F.softmax(outputs, dim=1)
             
             # Loss: maximize probability for correct class
-            target_prob = probs[0, digit]
+            target_prob = probs[0, fashion_class]
             loss = -target_prob  # Negative for maximization
             
             loss.backward()
@@ -127,22 +135,26 @@ class SimpleQualityBoost:
         total_confidence = 0
         total_accuracy = 0
         total_samples = 0
-        digit_results = {}
+        class_results = {}
         best_samples = {}
         
-        for digit in range(10):
-            print(f"  Testing digit {digit}...")
+        # Get fashion class names
+        fashion = FashionMNIST()
+        class_names = fashion.CLASS_NAMES
+        
+        for class_idx in range(10):
+            print(f"  Testing {class_names[class_idx]} (class {class_idx})...")
             
             confidences = []
             accuracies = []
-            digit_samples = []
+            class_samples = []
             
             # Generate samples for this digit
             num_tests = 20  # Number of test samples per digit
             
             for _ in range(num_tests):
                 if method == 'guided_sampling':
-                    samples, scores = self.quality_guided_sampling(digit, num_candidates=100, top_k=1)
+                    samples, scores = self.quality_guided_sampling(class_idx, num_candidates=100, top_k=1)
                     sample = samples[0]
                     
                     # Re-evaluate the selected sample
@@ -154,7 +166,7 @@ class SimpleQualityBoost:
                         predicted = outputs.argmax(dim=1).item()
                 
                 elif method == 'iterative_optimization':
-                    sample, confidence = self.iterative_latent_optimization(digit)
+                    sample, confidence = self.iterative_latent_optimization(class_idx)
                     
                     # Re-evaluate for consistency
                     with torch.no_grad():
@@ -165,7 +177,7 @@ class SimpleQualityBoost:
                 else:  # baseline method
                     with torch.no_grad():
                         z = torch.randn(1, 32, device=self.device)
-                        labels = torch.tensor([digit], device=self.device)
+                        labels = torch.tensor([class_idx], device=self.device)
                         generated = self.model.decode(z, labels)
                         sample = generated.squeeze().cpu()
                         
@@ -176,29 +188,29 @@ class SimpleQualityBoost:
                         predicted = outputs.argmax(dim=1).item()
                 
                 # Record results
-                accuracy = 1.0 if predicted == digit else 0.0
+                accuracy = 1.0 if predicted == class_idx else 0.0
                 
                 confidences.append(confidence)
                 accuracies.append(accuracy)
-                digit_samples.append(sample)
+                class_samples.append(sample)
                 
                 total_confidence += confidence
                 total_accuracy += accuracy
                 total_samples += 1
             
-            # Calculate digit statistics
+            # Calculate class statistics
             avg_confidence = np.mean(confidences)
             avg_accuracy = np.mean(accuracies)
             
-            digit_results[digit] = {
+            class_results[class_idx] = {
                 'confidence': avg_confidence,
                 'accuracy': avg_accuracy,
-                'samples': digit_samples
+                'samples': class_samples
             }
             
-            # Find best sample for this digit
+            # Find best sample for this fashion class
             best_idx = np.argmax([c * a for c, a in zip(confidences, accuracies)])
-            best_samples[digit] = digit_samples[best_idx]
+            best_samples[class_idx] = class_samples[best_idx]
             
             print(f"    → Confidence: {avg_confidence:.3f}, Accuracy: {avg_accuracy:.1%}")
         
@@ -207,7 +219,7 @@ class SimpleQualityBoost:
         overall_accuracy = total_accuracy / total_samples
         quality_score = overall_confidence * overall_accuracy
         
-        return quality_score, digit_results, best_samples
+        return quality_score, class_results, best_samples
     
     def create_comparison_report(self, baseline_quality, improved_quality, method_name):
         """Create comparison report"""

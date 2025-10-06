@@ -1,20 +1,30 @@
-# Enhanced VAE Fashion Item Generator - Requirements
+# Fashion Item Generator - Requirements
 # 
-# Production-ready dependencies for A-EXCELLENT Enhanced VAE
+# Superior VAE with A+ EXCEPTIONAL performance
 # Install with: pip install -r requirements.txt
 
 # Core ML/DL framework
 torch>=2.0.0
 torchvision>=0.15.0
 
-# Data handling and computation  
-numpy>=1.24.0
+# Numerical computing
+numpy>=1.20.0
 
 # Visualization and plotting
-matplotlib>=3.7.0
+matplotlib>=3.5.0
+
+# Utilities
+tqdm>=4.64.0
+packaging>=21.0
 
 # Image processing
-pillow>=10.0.0
+pillow>=8.0.0
 
-# Optional: Enhanced evaluation metrics
-scikit-learn>=1.3.0
+# Enhanced evaluation metrics
+scikit-learn>=1.0.0
+
+# Development dependencies (optional)
+pytest>=6.0.0
+black>=22.0.0
+isort>=5.0.0
+flake8>=4.0.0

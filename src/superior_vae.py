@@ -24,8 +24,8 @@ from datetime import datetime
 import math
 import warnings
 from torch.autograd import Variable
-
-from fashion_handler import FashionMNIST
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
 
 
 class SelfAttention(nn.Module):
@@ -578,7 +578,18 @@ def run_superior_training():
     warnings.filterwarnings('ignore')
     
     # Load Fashion-MNIST data with larger batch size for efficiency
-    fashion = FashionMNIST(batch_size=256)
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,))
+    ])
+    
+    train_dataset = datasets.FashionMNIST(
+        root='./data', train=True, download=True, transform=transform
+    )
+    train_loader = DataLoader(
+        train_dataset, batch_size=256, shuffle=True, 
+        num_workers=4, pin_memory=True, persistent_workers=True
+    )
     
     # Create superior trainer
     trainer = SuperiorVAETrainer(
@@ -598,10 +609,19 @@ def run_superior_training():
     print(f"   Learning Rate: 2e-3 with OneCycle")
     print(f"   Device: {trainer.device}")
     
+    # Create validation loader
+    val_dataset = datasets.FashionMNIST(
+        root='./data', train=False, download=True, transform=transform
+    )
+    val_loader = DataLoader(
+        val_dataset, batch_size=256, shuffle=False,
+        num_workers=4, pin_memory=True, persistent_workers=True
+    )
+    
     # Intensive training
     history = trainer.intensive_train(
-        train_loader=fashion.get_train_loader(),
-        val_loader=fashion.get_test_loader(),
+        train_loader=train_loader,
+        val_loader=val_loader,
         epochs=500,  # Intensive training
         save_path='models/superior_vae_ultimate.pth',
         checkpoint_freq=100

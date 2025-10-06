@@ -16,8 +16,9 @@ import time
 from datetime import datetime
 import os
 import json
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
 
-from fashion_handler import FashionMNIST
 from superior_vae import SuperiorVAE
 
 
@@ -147,8 +148,18 @@ class SuperiorVAEEvaluator:
             return
         
         # Load test data
-        self.fashion = FashionMNIST(batch_size=64)
-        self.test_loader = self.fashion.get_test_loader()
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5,), (0.5,))
+        ])
+        
+        test_dataset = datasets.FashionMNIST(
+            root='./data', train=False, download=True, transform=transform
+        )
+        self.test_loader = DataLoader(
+            test_dataset, batch_size=64, shuffle=False,
+            num_workers=4, pin_memory=True, persistent_workers=True
+        )
         
         # Model info
         total_params = sum(p.numel() for p in self.model.parameters())

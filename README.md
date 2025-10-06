@@ -112,7 +112,7 @@ from src.superior_vae import SuperiorVAE
 
 fashion_item_generator/
 
-├── src/                    # Core source code (8 files)# Load Superior VAE (A+ EXCEPTIONAL performance)
+├── src/                    # Core source code (6 files - ultra-lean!)# Load Superior VAE (A+ EXCEPTIONAL performance)
 
 │   ├── CNN Classifierdevice = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
 
@@ -132,7 +132,7 @@ fashion_item_generator/
 
 │   └── Utilities```
 
-│       └── cli.py                               # Command line interface
+
 
 ├── models/                 # Trained models (2 files)### Train Superior VAE (A+ EXCEPTIONAL)
 

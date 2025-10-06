@@ -88,19 +88,19 @@ class ExpertFashionCNN(nn.Module):
 
 def visual_test_expert_cnn():
     """Visual test of Expert CNN on real Fashion-MNIST images."""
-    print("🖼️  VISUAL TEST - EXPERT CNN ON REAL IMAGES")
+    print("  VISUAL TEST - EXPERT CNN ON REAL IMAGES")
     print("=" * 60)
     
     # Setup device
     device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
-    print(f"🖥️  Testing on: {device}")
+    print(f"  Testing on: {device}")
     
     # Load model
     model = ExpertFashionCNN().to(device)
     model_path = 'models/champion_95percent_cnn.pth'
     
     if not os.path.exists(model_path):
-        print(f"❌ Model not found at {model_path}")
+        print(f" Model not found at {model_path}")
         return
     
     print(f"📂 Loading model from: {model_path}")
@@ -128,7 +128,7 @@ def visual_test_expert_cnn():
                    'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
     
     # Test on random samples from each class
-    print("🎯 Testing on samples from each fashion class...")
+    print(" Testing on samples from each fashion class...")
     
     # Get samples for each class
     class_samples = {i: [] for i in range(10)}
@@ -189,7 +189,7 @@ def visual_test_expert_cnn():
                     
                     # Color code: green for correct, red for incorrect
                     color = 'green' if is_correct else 'red'
-                    status = '✅' if is_correct else '❌'
+                    status = '' if is_correct else ''
                     
                     title = f"{status} {class_names[predicted_class]}\nConf: {confidence_score:.3f}"
                     ax.set_title(title, fontsize=9, color=color, fontweight='bold')
@@ -212,13 +212,13 @@ def visual_test_expert_cnn():
             class_acc = class_accuracies[class_idx]
             if class_acc >= 95:
                 acc_color = 'green'
-                acc_status = '🎯'
+                acc_status = ''
             elif class_acc >= 90:
                 acc_color = 'orange'
-                acc_status = '⚠️'
+                acc_status = ''
             else:
                 acc_color = 'red'
-                acc_status = '❌'
+                acc_status = ''
             
             ax_stats.text(0.5, 0.5, f"{acc_status}\nClass Acc:\n{class_acc:.1f}%", 
                          ha='center', va='center', fontsize=10, 
@@ -237,14 +237,14 @@ def visual_test_expert_cnn():
     # Calculate sample accuracy
     sample_accuracy = 100 * correct_predictions / total_predictions
     
-    print(f"\n📊 VISUAL TEST RESULTS:")
+    print(f"\n VISUAL TEST RESULTS:")
     print("=" * 40)
-    print(f"🎯 Sample Accuracy: {sample_accuracy:.1f}% ({correct_predictions}/{total_predictions})")
-    print(f"🏆 Overall Model Accuracy: 95.30% (from full test)")
-    print(f"💾 Visualization saved: {save_path}")
+    print(f" Sample Accuracy: {sample_accuracy:.1f}% ({correct_predictions}/{total_predictions})")
+    print(f" Overall Model Accuracy: 95.30% (from full test)")
+    print(f" Visualization saved: {save_path}")
     
     # Show some detailed predictions
-    print(f"\n🔍 DETAILED SAMPLE ANALYSIS:")
+    print(f"\n DETAILED SAMPLE ANALYSIS:")
     print("-" * 50)
     
     # Test on some specific challenging examples
@@ -264,7 +264,7 @@ def visual_test_expert_cnn():
             actual = class_names[targets[i]]
             pred = class_names[predictions[i]]
             conf = confidences[i].item()
-            status = "✅" if targets[i] == predictions[i] else "❌"
+            status = "" if targets[i] == predictions[i] else ""
             
             # Get top 3 predictions for this sample
             top3_probs, top3_indices = torch.topk(probabilities[i], 3)
@@ -275,11 +275,11 @@ def visual_test_expert_cnn():
             print(f"     Actual: {actual}")
             print(f"     Top-3 Predictions:")
             for j, (cls, conf_val) in enumerate(zip(top3_classes, top3_confidences)):
-                rank = "🥇" if j == 0 else "🥈" if j == 1 else "🥉"
+                rank = "" if j == 0 else "" if j == 1 else ""
                 print(f"       {rank} {cls}: {conf_val:.3f}")
     
-    print(f"\n🎉 Visual testing complete!")
-    print(f"🚀 Expert CNN demonstrates excellent performance on real images!")
+    print(f"\n Visual testing complete!")
+    print(f" Expert CNN demonstrates excellent performance on real images!")
     
     return save_path
 

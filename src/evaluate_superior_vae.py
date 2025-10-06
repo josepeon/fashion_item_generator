@@ -142,9 +142,9 @@ class SuperiorVAEEvaluator:
         if os.path.exists(model_path):
             state_dict = torch.load(model_path, map_location=self.device, weights_only=False)
             self.model.load_state_dict(state_dict)
-            print(f"✅ Loaded Superior VAE: {model_path}")
+            print(f"Loaded Superior VAE: {model_path}")
         else:
-            print(f"⚠️  Model not found: {model_path}")
+            print(f"Model not found: {model_path}")
             return
         
         # Load test data
@@ -163,7 +163,7 @@ class SuperiorVAEEvaluator:
         
         # Model info
         total_params = sum(p.numel() for p in self.model.parameters())
-        print(f"🔬 Superior VAE Evaluator initialized")
+        print(f"Superior VAE Evaluator initialized")
         print(f"   Device: {self.device}")
         print(f"   Model parameters: {total_params:,}")
         print(f"   Conditional: {self.model.conditional}")
@@ -171,7 +171,7 @@ class SuperiorVAEEvaluator:
     
     def comprehensive_evaluation(self, num_samples: int = 100) -> Dict:
         """Run comprehensive evaluation suite."""
-        print(f"\n🔬 COMPREHENSIVE SUPERIOR VAE EVALUATION")
+        print(f"\nCOMPREHENSIVE SUPERIOR VAE EVALUATION")
         print("=" * 60)
         print(f"Model: {self.model_path}")
         print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -184,22 +184,22 @@ class SuperiorVAEEvaluator:
         }
         
         # 1. Reconstruction Quality
-        print(f"\n🔍 Testing reconstruction quality...")
+        print(f"\nTesting reconstruction quality...")
         recon_results = self._test_reconstruction_quality()
         results.update(recon_results)
         
         # 2. Generation Quality
-        print(f"\n🎨 Testing generation quality...")
+        print(f"\nTesting generation quality...")
         gen_results = self._test_generation_quality(num_samples)
         results.update(gen_results)
         
         # 3. Latent Space Properties
-        print(f"\n🌌 Testing latent space properties...")
+        print(f"\nTesting latent space properties...")
         latent_results = self._test_latent_space()
         results.update(latent_results)
         
         # 4. Conditional Generation
-        print(f"\n🎯 Testing conditional generation...")
+        print(f"\nTesting conditional generation...")
         cond_results = self._test_conditional_generation()
         results.update(cond_results)
         
@@ -229,10 +229,10 @@ class SuperiorVAEEvaluator:
         with open(results_path, 'w') as f:
             json.dump(serializable_results, f, indent=2)
         
-        print(f"\n🏆 EVALUATION COMPLETE")
-        print(f"   📊 Results saved: {results_path}")
-        print(f"   🎯 Overall Score: {overall_score:.4f}")
-        print(f"   🏅 Grade: {results['grade']}")
+        print(f"\nEVALUATION COMPLETE")
+        print(f"   Results saved: {results_path}")
+        print(f"   Overall Score: {overall_score:.4f}")
+        print(f"   Grade: {results['grade']}")
         
         return results
     
@@ -278,9 +278,9 @@ class SuperiorVAEEvaluator:
         if reconstruction_samples:
             self._save_reconstruction_demo(reconstruction_samples)
         
-        print(f"   📊 Reconstruction MSE: {avg_metrics['recon_mse']:.4f}")
-        print(f"   📊 Correlation: {avg_metrics['recon_correlation']:.4f}")
-        print(f"   📊 Quality Score: {avg_metrics['recon_quality_score']:.4f}")
+        print(f"   Reconstruction MSE: {avg_metrics['recon_mse']:.4f}")
+        print(f"   Correlation: {avg_metrics['recon_correlation']:.4f}")
+        print(f"   Quality Score: {avg_metrics['recon_quality_score']:.4f}")
         
         return avg_metrics
     
@@ -319,9 +319,9 @@ class SuperiorVAEEvaluator:
         # Save generation showcase
         self._save_generation_showcase(class_samples)
         
-        print(f"   📊 Generation diversity: {gen_results['gen_diversity']:.4f}")
-        print(f"   📊 Visual quality: {gen_results['gen_visual_quality']:.4f}")
-        print(f"   📊 Generation score: {gen_results['gen_quality_score']:.4f}")
+        print(f"   Generation diversity: {gen_results['gen_diversity']:.4f}")
+        print(f"   Visual quality: {gen_results['gen_visual_quality']:.4f}")
+        print(f"   Generation score: {gen_results['gen_quality_score']:.4f}")
         
         return gen_results
     
@@ -339,8 +339,8 @@ class SuperiorVAEEvaluator:
             'latent_score': (smoothness + interp_quality) * 0.5
         }
         
-        print(f"   📊 Latent smoothness: {latent_results['latent_smoothness']:.4f}")
-        print(f"   📊 Interpolation quality: {latent_results['interpolation_quality']:.4f}")
+        print(f"   Latent smoothness: {latent_results['latent_smoothness']:.4f}")
+        print(f"   Interpolation quality: {latent_results['interpolation_quality']:.4f}")
         
         return latent_results
     
@@ -360,8 +360,8 @@ class SuperiorVAEEvaluator:
             'conditional_score': (class_separation + class_consistency) * 0.5
         }
         
-        print(f"   📊 Class separation: {cond_results['class_separation']:.4f}")
-        print(f"   📊 Class consistency: {cond_results['class_consistency']:.4f}")
+        print(f"   Class separation: {cond_results['class_separation']:.4f}")
+        print(f"   Class consistency: {cond_results['class_consistency']:.4f}")
         
         return cond_results
     
@@ -495,7 +495,7 @@ class SuperiorVAEEvaluator:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
         plt.close()
         
-        print(f"   📊 Reconstruction demo saved: {save_path}")
+        print(f"    Reconstruction demo saved: {save_path}")
     
     def _save_generation_showcase(self, class_samples: Dict):
         """Save generation quality showcase."""
@@ -522,18 +522,18 @@ class SuperiorVAEEvaluator:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
         plt.close()
         
-        print(f"   📊 Generation showcase saved: {save_path}")
+        print(f"    Generation showcase saved: {save_path}")
 
 
 def run_superior_evaluation():
     """Run superior VAE evaluation."""
-    print("🏆 SUPERIOR VAE EVALUATION SUITE")
+    print("SUPERIOR VAE EVALUATION SUITE")
     print("=" * 50)
     
     # Check for model
     model_path = 'models/superior_vae_ultimate.pth'
     if not os.path.exists(model_path):
-        print(f"⚠️  Superior VAE model not found: {model_path}")
+        print(f"Superior VAE model not found: {model_path}")
         print("   Run the training first: python src/superior_vae.py")
         return None
     

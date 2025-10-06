@@ -88,12 +88,12 @@ class ExpertFashionCNN(nn.Module):
 
 def test_expert_cnn():
     """Test the trained Expert CNN model."""
-    print("🧪 TESTING EXPERT CNN MODEL")
+    print("TESTING EXPERT CNN MODEL")
     print("=" * 50)
     
     # Setup device
     device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
-    print(f"🖥️  Testing on: {device}")
+    print(f"Testing on: {device}")
     
     # Load model
     model = ExpertFashionCNN().to(device)
@@ -101,12 +101,12 @@ def test_expert_cnn():
     # Check if model exists
     model_path = 'models/champion_95percent_cnn.pth'
     if not os.path.exists(model_path):
-        print(f"❌ Model not found at {model_path}")
+        print(f"Model not found at {model_path}")
         print("Available models:")
         if os.path.exists('models'):
             for file in os.listdir('models'):
                 if file.endswith('.pth'):
-                    print(f"   📁 {file}")
+                    print(f"    {file}")
         return
     
     # Load trained weights
@@ -115,7 +115,7 @@ def test_expert_cnn():
     model.eval()
     
     total_params = sum(p.numel() for p in model.parameters())
-    print(f"🧠 Model parameters: {total_params:,}")
+    print(f" Model parameters: {total_params:,}")
     
     # Load test data
     test_transform = transforms.Compose([
@@ -131,10 +131,10 @@ def test_expert_cnn():
         num_workers=4, pin_memory=True
     )
     
-    print(f"📊 Test samples: {len(test_dataset):,}")
+    print(f" Test samples: {len(test_dataset):,}")
     
     # Enhanced test-time augmentation evaluation
-    print("\n🔍 Running enhanced evaluation with TTA...")
+    print("\n Running enhanced evaluation with TTA...")
     
     class_correct = [0] * 10
     class_total = [0] * 10
@@ -177,9 +177,9 @@ def test_expert_cnn():
     total_samples = sum(class_total)
     overall_accuracy = 100 * total_correct / total_samples
     
-    print(f"\n🎯 EXPERT CNN TEST RESULTS")
+    print(f"\n EXPERT CNN TEST RESULTS")
     print("=" * 50)
-    print("📊 Per-Class Accuracy (Enhanced TTA):")
+    print(" Per-Class Accuracy (Enhanced TTA):")
     print("-" * 50)
     
     worst_class_acc = 100.0
@@ -192,15 +192,15 @@ def test_expert_cnn():
             worst_class_acc = min(worst_class_acc, class_acc)
             if class_acc >= 95:
                 classes_above_95 += 1
-                status = "🎯"
+                status = ""
             elif class_acc >= 90:
                 classes_above_90 += 1
-                status = "⚠️"
+                status = ""
             else:
-                status = "❌"
+                status = ""
             print(f"  {status} {class_names[i]:12}: {class_acc:6.2f}% ({class_correct[i]:3d}/{class_total[i]:3d})")
     
-    print(f"\n🏆 OVERALL PERFORMANCE:")
+    print(f"\n OVERALL PERFORMANCE:")
     print(f"   Overall Accuracy: {overall_accuracy:.2f}%")
     print(f"   Worst Class: {worst_class_acc:.2f}%")
     print(f"   Classes ≥95%: {classes_above_95}/10")
@@ -208,27 +208,27 @@ def test_expert_cnn():
     
     if overall_accuracy >= 95:
         grade = "A++ OUTSTANDING"
-        status = "🏆🎉🎯 TARGET ACHIEVED! 95%+"
-        emoji = "🎊🏆🥇⭐"
+        status = " TARGET ACHIEVED! 95%+"
+        emoji = "⭐"
     elif overall_accuracy >= 94:
         grade = "A+ EXCELLENT"
-        status = "🥇 SO CLOSE! Almost there!"
-        emoji = "🥇⭐🔥"
+        status = " SO CLOSE! Almost there!"
+        emoji = "⭐"
     elif overall_accuracy >= 93:
         grade = "A VERY GOOD"
-        status = "🥈 Great progress!"
-        emoji = "🥈🔥💪"
+        status = " Great progress!"
+        emoji = "💪"
     else:
         grade = "B+ GOOD"
-        status = "🥉 Good work!"
-        emoji = "🥉💪👍"
+        status = " Good work!"
+        emoji = "💪👍"
     
     print(f"   Grade: {grade}")
     print(f"   Status: {status}")
     print(f"   {emoji}")
     
     # Show some sample predictions
-    print(f"\n🔍 SAMPLE PREDICTIONS:")
+    print(f"\n SAMPLE PREDICTIONS:")
     print("-" * 30)
     
     # Get a few samples for visualization
@@ -249,11 +249,11 @@ def test_expert_cnn():
         actual = class_names[sample_targets[i]]
         pred = class_names[predicted[i]]
         conf = confidences[i].item()
-        status = "✅" if sample_targets[i] == predicted[i] else "❌"
+        status = "" if sample_targets[i] == predicted[i] else ""
         print(f"  {status} Actual: {actual:12} | Predicted: {pred:12} | Confidence: {conf:.3f}")
     
-    print(f"\n🎉 Expert CNN model evaluation complete!")
-    print(f"🚀 Model is ready for deployment and inference!")
+    print(f"\n Expert CNN model evaluation complete!")
+    print(f" Model is ready for deployment and inference!")
     
     return {
         'overall_accuracy': overall_accuracy,

@@ -332,7 +332,7 @@ class SuperiorVAETrainer:
         use_warmup: bool = True
     ):
         self.device = device or ('mps' if torch.backends.mps.is_available() else 'cpu')
-        print(f"🚀 Superior VAE Trainer initialized on {self.device}")
+        print(f" Superior VAE Trainer initialized on {self.device}")
         
         # Initialize superior model
         self.model = SuperiorVAE(latent_dim, conditional=conditional).to(self.device)
@@ -340,7 +340,7 @@ class SuperiorVAETrainer:
         # Count parameters
         total_params = sum(p.numel() for p in self.model.parameters())
         trainable_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
-        print(f"📊 Model Parameters: {total_params:,} total, {trainable_params:,} trainable")
+        print(f" Model Parameters: {total_params:,} total, {trainable_params:,} trainable")
         
         # Advanced optimizer with weight decay
         self.optimizer = optim.AdamW(
@@ -465,7 +465,7 @@ class SuperiorVAETrainer:
         checkpoint_freq: int = 50
     ):
         """Intensive uninterrupted training for superior quality."""
-        print(f"\n🔥 STARTING INTENSIVE TRAINING - {epochs} EPOCHS")
+        print(f"\n STARTING INTENSIVE TRAINING - {epochs} EPOCHS")
         print("=" * 70)
         
         # Advanced learning rate scheduler
@@ -540,7 +540,7 @@ class SuperiorVAETrainer:
                 self.patience_counter = 0
                 torch.save(self.model.state_dict(), save_path)
                 if epoch % 50 == 0:
-                    print(f"  🎯 Best model saved (loss: {self.best_loss:.4f})")
+                    print(f"   Best model saved (loss: {self.best_loss:.4f})")
             else:
                 self.patience_counter += 1
             
@@ -548,11 +548,11 @@ class SuperiorVAETrainer:
             if (epoch + 1) % checkpoint_freq == 0:
                 checkpoint_path = f"models/superior_vae_epoch_{epoch+1}.pth"
                 torch.save(self.model.state_dict(), checkpoint_path)
-                print(f"  💾 Checkpoint saved: {checkpoint_path}")
+                print(f"   Checkpoint saved: {checkpoint_path}")
             
             # Early stopping check (but with high patience for intensive training)
             if self.patience_counter >= self.patience:
-                print(f"🛑 Early stopping at epoch {epoch+1} (patience: {self.patience})")
+                print(f" Early stopping at epoch {epoch+1} (patience: {self.patience})")
                 break
         
         training_time = time.time() - start_time
@@ -560,7 +560,7 @@ class SuperiorVAETrainer:
         minutes = (training_time % 3600) // 60
         seconds = training_time % 60
         
-        print(f"\n🎉 INTENSIVE TRAINING COMPLETED!")
+        print(f"\n INTENSIVE TRAINING COMPLETED!")
         print(f"   Time: {hours:.0f}h {minutes:.0f}m {seconds:.1f}s")
         print(f"   Best validation loss: {self.best_loss:.6f}")
         print(f"   Total epochs: {epoch+1}")
@@ -570,9 +570,9 @@ class SuperiorVAETrainer:
 
 def run_superior_training():
     """Run superior VAE training with intensive regime."""
-    print("🔥 SUPERIOR VAE - INTENSIVE TRAINING SESSION")
+    print(" SUPERIOR VAE - INTENSIVE TRAINING SESSION")
     print("=" * 70)
-    print("🚀 Preparing for uninterrupted high-quality training...")
+    print(" Preparing for uninterrupted high-quality training...")
     
     # Suppress warnings for cleaner output
     warnings.filterwarnings('ignore')
@@ -601,7 +601,7 @@ def run_superior_training():
         use_warmup=True
     )
     
-    print(f"🎯 Training Configuration:")
+    print(f" Training Configuration:")
     print(f"   Model: Superior VAE with Attention")
     print(f"   Latent Dimensions: 64")
     print(f"   Batch Size: 256")
@@ -627,8 +627,8 @@ def run_superior_training():
         checkpoint_freq=100
     )
     
-    print("\n🌟 SUPERIOR VAE TRAINING COMPLETE!")
-    print("🎨 Generating quality demonstration...")
+    print("\n SUPERIOR VAE TRAINING COMPLETE!")
+    print(" Generating quality demonstration...")
     
     # Final quality assessment
     trainer.model.eval()
@@ -665,9 +665,9 @@ def run_superior_training():
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
         plt.close()
         
-        print(f"   🖼️ Quality demonstration saved: {save_path}")
+        print(f"    Quality demonstration saved: {save_path}")
     
-    print("\n🏆 MISSION ACCOMPLISHED - SUPERIOR VAE READY!")
+    print("\n MISSION ACCOMPLISHED - SUPERIOR VAE READY!")
     return trainer, history
 
 

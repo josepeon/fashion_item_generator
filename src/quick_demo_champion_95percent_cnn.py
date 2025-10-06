@@ -79,7 +79,7 @@ class ExpertFashionCNN(nn.Module):
 
 def quick_demo():
     """Quick demo of Expert CNN on Fashion-MNIST images."""
-    print("👕 QUICK DEMO - Expert CNN on Fashion Images")
+    print(" QUICK DEMO - Expert CNN on Fashion Images")
     print("=" * 50)
     
     device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
@@ -155,13 +155,13 @@ def quick_demo():
     plt.savefig('results/expert_cnn_quick_demo.png', dpi=200, bbox_inches='tight')
     plt.show()
     
-    print(f"\n📊 Quick Demo Results:")
+    print(f"\n Quick Demo Results:")
     print(f"   Sample Accuracy: {correct_count}/10 = {100*correct_count/10:.0f}%")
     print(f"   Overall Model: 95.30% accuracy")
     print(f"   Saved: results/expert_cnn_quick_demo.png")
     
     # Show detailed predictions for a few samples
-    print(f"\n🔍 Detailed Analysis:")
+    print(f"\n Detailed Analysis:")
     test_loader = DataLoader(test_dataset, batch_size=3, shuffle=True)
     data, targets = next(iter(test_loader))
     data = data.to(device)
@@ -180,7 +180,7 @@ def quick_demo():
             for j, (prob, idx) in enumerate(zip(top3_probs, top3_indices)):
                 pred_class = class_names[idx]
                 confidence = prob.item()
-                rank = ["🥇", "🥈", "🥉"][j]
+                rank = ["", "", ""][j]
                 status = "← CORRECT" if idx == targets[i] else ""
                 print(f"    {rank} {pred_class}: {confidence:.3f} {status}")
 

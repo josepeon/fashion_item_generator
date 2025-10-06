@@ -107,9 +107,9 @@ class ExpertFashionCNN(nn.Module):
 
 def train_expert_cnn():
     """Train expert CNN optimized for 95%+ accuracy."""
-    print("👨‍🔬 EXPERT CNN FOR 95%+ ACCURACY!")
+    print(" EXPERT CNN FOR 95%+ ACCURACY!")
     print("=" * 70)
-    print("🎯 Expert techniques:")
+    print(" Expert techniques:")
     print("   • Optimized architecture for Fashion-MNIST")
     print("   • Balanced feature extraction")
     print("   • Strong regularization")
@@ -119,7 +119,7 @@ def train_expert_cnn():
     
     # Setup device
     device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
-    print(f"🖥️  Training on: {device}")
+    print(f"  Training on: {device}")
     
     # Optimized augmentation for fashion items
     train_transform = transforms.Compose([
@@ -154,13 +154,13 @@ def train_expert_cnn():
         num_workers=8, pin_memory=True, persistent_workers=True
     )
     
-    print(f"📊 Training samples: {len(train_dataset):,}")
-    print(f"📊 Test samples: {len(test_dataset):,}")
+    print(f" Training samples: {len(train_dataset):,}")
+    print(f" Test samples: {len(test_dataset):,}")
     
     # Create expert model
     model = ExpertFashionCNN().to(device)
     total_params = sum(p.numel() for p in model.parameters())
-    print(f"🧠 Expert model parameters: {total_params:,}")
+    print(f" Expert model parameters: {total_params:,}")
     
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
@@ -174,7 +174,7 @@ def train_expert_cnn():
         pct_start=0.1, anneal_strategy='cos'
     )
     
-    print(f"🔧 Expert setup:")
+    print(f" Expert setup:")
     print(f"   Epochs: {epochs}")
     print(f"   OneCycle scheduler (max_lr=0.002)")
     print(f"   Label smoothing + weight decay")
@@ -186,7 +186,7 @@ def train_expert_cnn():
     max_patience = 20
     target_reached = False
     
-    print("🚀 Starting expert training...")
+    print(" Starting expert training...")
     print("-" * 70)
     
     for epoch in range(epochs):
@@ -253,7 +253,7 @@ def train_expert_cnn():
         epoch_train_acc = 100 * correct_train / total_train
         epoch_test_acc = 100 * correct_test / total_test
         
-        print(f"📈 Epoch {epoch+1:2d}/{epochs} | "
+        print(f" Epoch {epoch+1:2d}/{epochs} | "
               f"Train Acc: {epoch_train_acc:.2f}% | "
               f"Test Acc: {epoch_test_acc:.2f}%")
         
@@ -261,24 +261,24 @@ def train_expert_cnn():
         if epoch_test_acc > best_test_acc:
             best_test_acc = epoch_test_acc
             torch.save(model.state_dict(), 'models/champion_95percent_cnn.pth')
-            print(f"💾 New best model saved! Test accuracy: {best_test_acc:.2f}%")
+            print(f" New best model saved! Test accuracy: {best_test_acc:.2f}%")
             patience_counter = 0
             
             if best_test_acc >= 95.0 and not target_reached:
-                print(f"🎉🎉🎉 TARGET ACHIEVED! 95%+ accuracy: {best_test_acc:.2f}%")
+                print(f" TARGET ACHIEVED! 95%+ accuracy: {best_test_acc:.2f}%")
                 target_reached = True
         else:
             patience_counter += 1
         
         # Early stopping
         if patience_counter >= max_patience:
-            print(f"⏹️  Early stopping after {patience_counter} epochs without improvement")
+            print(f"⏹  Early stopping after {patience_counter} epochs without improvement")
             break
         
         print("-" * 70)
     
-    print("🎉 EXPERT TRAINING COMPLETED!")
-    print(f"🏆 Best test accuracy: {best_test_acc:.2f}%")
+    print(" EXPERT TRAINING COMPLETED!")
+    print(f" Best test accuracy: {best_test_acc:.2f}%")
     
     # Final comprehensive evaluation
     model.load_state_dict(torch.load('models/champion_95percent_cnn.pth', map_location=device, weights_only=True))
@@ -314,9 +314,9 @@ def train_expert_cnn():
                 if predicted[i] == target[i]:
                     class_correct[label] += 1
     
-    print("\\n🎯 EXPERT CNN FINAL RESULTS")
+    print("\\n EXPERT CNN FINAL RESULTS")
     print("=" * 60)
-    print("📊 Per-Class Accuracy (Enhanced TTA):")
+    print(" Per-Class Accuracy (Enhanced TTA):")
     
     worst_class_acc = 100.0
     classes_above_95 = 0
@@ -331,15 +331,15 @@ def train_expert_cnn():
             worst_class_acc = min(worst_class_acc, class_acc)
             if class_acc >= 95:
                 classes_above_95 += 1
-                status = "🎯"
+                status = ""
             elif class_acc >= 90:
                 classes_above_90 += 1
-                status = "⚠️"
+                status = ""
             else:
-                status = "❌"
+                status = ""
             print(f"  {status} {class_names[i]:12}: {class_acc:6.2f}% ({class_correct[i]:3d}/{class_total[i]:3d})")
     
-    print(f"\\n🏆 EXPERT ASSESSMENT:")
+    print(f"\\n EXPERT ASSESSMENT:")
     print(f"   Final Accuracy: {final_accuracy:.2f}%")
     print(f"   Best Training: {best_test_acc:.2f}%")
     print(f"   Worst Class: {worst_class_acc:.2f}%")
@@ -349,27 +349,27 @@ def train_expert_cnn():
     
     if final_accuracy >= 95:
         grade = "A++ OUTSTANDING"
-        status = "🏆🎉🎯 TARGET ACHIEVED! 95%+"
-        emoji = "🎊🏆🥇⭐"
+        status = " TARGET ACHIEVED! 95%+"
+        emoji = "⭐"
     elif final_accuracy >= 94:
         grade = "A+ EXCELLENT"
-        status = "🥇 SO CLOSE! Almost there!"
-        emoji = "🥇⭐🔥"
+        status = " SO CLOSE! Almost there!"
+        emoji = "⭐"
     elif final_accuracy >= 93:
         grade = "A VERY GOOD"
-        status = "🥈 Great progress!"
-        emoji = "🥈🔥💪"
+        status = " Great progress!"
+        emoji = "💪"
     else:
         grade = "B+ GOOD"
-        status = "🥉 Good work!"
-        emoji = "🥉💪👍"
+        status = " Good work!"
+        emoji = "💪👍"
     
     print(f"   Grade: {grade}")
     print(f"   Status: {status}")
     print(f"   {emoji} Expert optimized model!")
     
     # Progress summary
-    print(f"\\n📈 PROGRESS SUMMARY:")
+    print(f"\\n PROGRESS SUMMARY:")
     print(f"   Advanced CNN: 93.38%")
     print(f"   Ultra CNN: 93.28%")
     print(f"   Final Push: 88.42%")

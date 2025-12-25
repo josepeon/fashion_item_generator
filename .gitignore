@@ -105,3 +105,4 @@ site/
 .dmypy.json
 dmypy.json
 .pyre/
+weights/*.pth

@@ -28,7 +28,7 @@ def get_device() -> torch.device:
 
 def load_model(path: str = "weights/vae.pth") -> FashionVAE:
     device = get_device()
-    model = FashionVAE(latent_dim=64, conditional=True).to(device)
+    model = FashionVAE(latent_dim=32, conditional=True).to(device)
     model.load_state_dict(torch.load(path, map_location=device, weights_only=True))
     model.eval()
     return model

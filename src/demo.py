@@ -64,7 +64,7 @@ def demo_cnn():
 def demo_vae():
     """Demo VAE generator."""
     device = get_device()
-    model = FashionVAE(latent_dim=64, conditional=True).to(device)
+    model = FashionVAE(latent_dim=32, conditional=True).to(device)
     model.load_state_dict(torch.load("weights/vae.pth", map_location=device, weights_only=True))
     model.eval()
 

@@ -2,7 +2,6 @@
 """Evaluate Fashion-MNIST VAE generator."""
 
 import json
-from datetime import datetime
 
 import numpy as np
 import torch
@@ -155,13 +154,11 @@ def main():
     print(f"\nGrade: {grade} (score: {score:.3f})")
 
     # Save visualizations
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    save_reconstruction_samples(model, test_loader, device, f"results/vae_recon_{timestamp}.png")
-    save_generation_samples(model, device, f"results/vae_gen_{timestamp}.png")
+    save_reconstruction_samples(model, test_loader, device, "results/vae_recon.png")
+    save_generation_samples(model, device, "results/vae_gen.png")
 
     # Save results
     results = {
-        "timestamp": timestamp,
         "parameters": params,
         "mse": mse,
         "correlation": corr,
@@ -170,10 +167,10 @@ def main():
         "score": score,
         "grade": grade,
     }
-    with open(f"results/vae_eval_{timestamp}.json", "w") as f:
+    with open("results/vae_eval.json", "w") as f:
         json.dump(results, f, indent=2)
 
-    print(f"\nResults saved to results/")
+    print("\nResults saved to results/")
 
 
 if __name__ == "__main__":

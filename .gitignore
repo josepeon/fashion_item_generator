@@ -1,108 +1,31 @@
-# Enhanced VAE Fashion Item Generator
-# A-EXCELLENT performance generative model
-
-# Python bytecode and cache
+# Python
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+dist/
+build/
+.eggs/
 
-# Testing and coverage
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-.pytest_cache/
-nosetests.xml
-coverage.xml
-*.cover
-
-# Virtual environments
-.env
-.venv
-env/
+# Environments
+.venv/
 venv/
-ENV/
-env.bak/
-venv.bak/
+.env
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IDE and editors
-.vscode/
+# IDE
 .idea/
+.vscode/
 *.swp
-*.swo
-*~
 
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-._*
+# Jupyter
+.ipynb_checkpoints/
 
-# Dataset files (auto-downloaded)
-data/MNIST/
-data/FashionMNIST/
-data/raw/
-data/processed/
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Training temporary files
-*.log
-optimization_log.json
-training_history.png
-checkpoint_*.pth
-temp_*.pth
-
-# ML experiment tracking
-logs/
-runs/
-mlruns/
-wandb/
-
-# Keep our trained model but ignore temporary training files
-!models/enhanced_vae_superior.pth
-
-# Exclude large Superior VAE models (>100MB GitHub limit)
-models/superior_vae_*.pth
-
-# Keep essential results but ignore intermediate files
-results/temp_*
-results/*_intermediate_*
-!results/.gitkeep
-!results/enhanced_vae_showcase_*.png
-!results/enhanced_vae_reconstruction_*.png  
-!results/enhanced_vae_interpolations_*.png
-!results/vae_evaluation_*.json
-
-# Documentation builds
-docs/_build/
-site/
-
-# Type checking
-.mypy_cache/
-.dmypy.json
-dmypy.json
-.pyre/
+# Project specific
 weights/*.pth
+data/
+*.log

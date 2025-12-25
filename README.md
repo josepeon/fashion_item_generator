@@ -16,47 +16,44 @@ conda env create -f environment.yml
 conda activate fashion_mnist_env
 ```
 
+Or with pip:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Usage
 
 ```bash
-# Demo both models
-python src/demo.py
+python src/demo.py          # Demo both models
+python src/evaluate_cnn.py  # Evaluate classifier
+python src/evaluate_vae.py  # Evaluate generator
+```
 
-# Evaluate CNN
-python src/evaluate_cnn.py
+Training (optional):
 
-# Evaluate VAE
-python src/evaluate_vae.py
-
-# Train (optional)
+```bash
 python src/train_cnn.py
 python src/train_vae.py
 ```
 
-## Structure
+## Project Structure
 
 ```
-fashion_item_generator/
 ├── src/
-│   ├── models/          # Model architectures
-│   │   ├── cnn.py       # FashionCNN
-│   │   └── vae.py       # FashionVAE
-│   ├── train_cnn.py     # CNN training
-│   ├── train_vae.py     # VAE training
-│   ├── evaluate_cnn.py  # CNN evaluation
-│   ├── evaluate_vae.py  # VAE evaluation
-│   └── demo.py          # Quick demo
-├── weights/             # Trained model weights
-│   ├── cnn.pth
-│   └── vae.pth
-├── data/                # Fashion-MNIST (auto-download)
-├── results/             # Generated outputs
-├── environment.yml
-└── requirements.txt
+│   ├── models/         # Model architectures
+│   ├── train_cnn.py    # Train classifier
+│   ├── train_vae.py    # Train generator
+│   ├── evaluate_cnn.py
+│   ├── evaluate_vae.py
+│   └── demo.py
+├── weights/            # Model weights (.pth)
+├── data/               # Fashion-MNIST (auto-download)
+└── results/            # Generated outputs
 ```
 
 ## Requirements
 
-- Python 3.12+
+- Python 3.10+
 - PyTorch 2.0+
-- Apple Silicon (MPS) / CUDA supported
+- MPS (Apple Silicon) / CUDA supported

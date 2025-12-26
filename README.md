@@ -33,7 +33,7 @@ python src/evaluate_vae.py  # Evaluate generator
 ### API Server
 
 ```bash
-python src/api.py           # Start FastAPI server on :8000
+cd src && python api.py     # Start FastAPI server on :8080
 ```
 
 Endpoints:
@@ -42,12 +42,12 @@ Endpoints:
 - `GET /health` - Service status
 - `GET /classes` - List all classes
 
-Docs at http://localhost:8000/docs
+Docs at http://localhost:8080/docs
 
 ### Streamlit Demo
 
 ```bash
-streamlit run src/app.py    # Interactive web demo
+cd src && streamlit run app.py    # Interactive web demo
 ```
 
 Features:

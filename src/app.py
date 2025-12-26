@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 """Streamlit interactive demo for Fashion-MNIST models."""
 
+from pathlib import Path
+
 import torch
 import numpy as np
 from PIL import Image
 import streamlit as st
 
 from models import FashionCNN, FashionVAE
+
+# Get project root - resolve to absolute path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+WEIGHTS_DIR = PROJECT_ROOT / "weights"
 
 # Class names
 CLASS_NAMES = [
@@ -22,18 +28,22 @@ def load_models():
     
     # Load CNN
     cnn = FashionCNN()
+    cnn_path = WEIGHTS_DIR / "cnn.pth"
     try:
-        cnn.load_state_dict(torch.load("weights/cnn.pth", map_location=device, weights_only=True))
+        cnn.load_state_dict(torch.load(cnn_path, map_location=device, weights_only=True))
         cnn.to(device).eval()
-    except FileNotFoundError:
+    except Exception as e:
+        print(f"Failed to load CNN from {cnn_path}: {e}")
         cnn = None
     
     # Load VAE
     vae = FashionVAE(latent_dim=32)
+    vae_path = WEIGHTS_DIR / "vae.pth"
     try:
-        vae.load_state_dict(torch.load("weights/vae.pth", map_location=device, weights_only=True))
+        vae.load_state_dict(torch.load(vae_path, map_location=device, weights_only=True))
         vae.to(device).eval()
-    except FileNotFoundError:
+    except Exception as e:
+        print(f"Failed to load VAE from {vae_path}: {e}")
         vae = None
     
     return cnn, vae, device
@@ -124,7 +134,7 @@ def main():
                 if vae is not None:
                     st.subheader(f"Generated Variations ({CLASS_NAMES[pred_class]})")
                     with torch.no_grad():
-                        samples = vae.generate(4, pred_class, device)
+                        samples = vae.generate_class(pred_class, 4, device)
                     
                     cols = st.columns(4)
                     for i, col in enumerate(cols):
@@ -140,7 +150,7 @@ def main():
                 
                 st.subheader(f"Generated: {selected_class}")
                 with torch.no_grad():
-                    samples = vae.generate(num_samples, class_id, device)
+                    samples = vae.generate_class(class_id, num_samples, device)
                 
                 cols = st.columns(min(num_samples, 4))
                 for i in range(num_samples):

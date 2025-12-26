@@ -5,6 +5,9 @@ import io
 import base64
 from typing import Optional
 
+import os
+from pathlib import Path
+
 import torch
 import numpy as np
 from PIL import Image
@@ -13,6 +16,10 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from models import FashionCNN, FashionVAE
+
+# Get project root (parent of src/)
+PROJECT_ROOT = Path(__file__).parent.parent
+WEIGHTS_DIR = PROJECT_ROOT / "weights"
 
 # Class names
 CLASS_NAMES = [
@@ -50,22 +57,24 @@ async def load_models():
     
     # Load CNN
     cnn = FashionCNN()
+    cnn_path = WEIGHTS_DIR / "cnn.pth"
     try:
-        cnn.load_state_dict(torch.load("weights/cnn.pth", map_location=device, weights_only=True))
+        cnn.load_state_dict(torch.load(cnn_path, map_location=device, weights_only=True))
         cnn.to(device).eval()
         print(f"✓ CNN loaded on {device}")
     except FileNotFoundError:
-        print("⚠ CNN weights not found at weights/cnn.pth")
+        print(f"⚠ CNN weights not found at {cnn_path}")
         cnn = None
     
     # Load VAE
     vae = FashionVAE(latent_dim=32)
+    vae_path = WEIGHTS_DIR / "vae.pth"
     try:
-        vae.load_state_dict(torch.load("weights/vae.pth", map_location=device, weights_only=True))
+        vae.load_state_dict(torch.load(vae_path, map_location=device, weights_only=True))
         vae.to(device).eval()
         print(f"✓ VAE loaded on {device}")
     except FileNotFoundError:
-        print("⚠ VAE weights not found at weights/vae.pth")
+        print(f"⚠ VAE weights not found at {vae_path}")
         vae = None
 
 
@@ -182,4 +191,4 @@ async def list_classes():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8080)

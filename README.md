@@ -30,6 +30,30 @@ python src/evaluate_cnn.py  # Evaluate classifier
 python src/evaluate_vae.py  # Evaluate generator
 ```
 
+### API Server
+
+```bash
+python src/api.py           # Start FastAPI server on :8000
+```
+
+Endpoints:
+- `POST /classify` - Upload image → get classification
+- `POST /generate` - Class ID → generated images (base64)
+- `GET /health` - Service status
+- `GET /classes` - List all classes
+
+Docs at http://localhost:8000/docs
+
+### Streamlit Demo
+
+```bash
+streamlit run src/app.py    # Interactive web demo
+```
+
+Features:
+- Upload image → classification + variations
+- Generate samples by class
+
 Training:
 
 ```bash
@@ -48,7 +72,9 @@ python src/train_vae.py     # ~150 epochs
 │   ├── train_vae.py
 │   ├── evaluate_cnn.py
 │   ├── evaluate_vae.py
-│   └── demo.py
+│   ├── demo.py
+│   ├── api.py              # FastAPI server
+│   └── app.py              # Streamlit demo
 ├── weights/                # Trained weights (gitignored)
 ├── data/                   # Fashion-MNIST (auto-download)
 └── results/                # Evaluation outputs

@@ -111,6 +111,79 @@ class FashionVAE(nn.Module):
         labels = torch.full((num_samples,), class_idx, dtype=torch.long, device=device)
         return self.generate(num_samples, labels, device, temperature)
 
+    @torch.no_grad()
+    def interpolate(self, class1: int, class2: int, steps: int = 8, device="cpu"):
+        """Interpolate between two classes in latent space.
+        
+        Args:
+            class1: Starting class index (0-9)
+            class2: Ending class index (0-9)
+            steps: Number of interpolation steps
+            device: Device to run on
+            
+        Returns:
+            Tensor of shape (steps, 1, 28, 28) with interpolated images
+        """
+        self.eval()
+        
+        # Sample random latent vectors for each class
+        z1 = torch.randn(1, self.latent_dim, device=device)
+        z2 = torch.randn(1, self.latent_dim, device=device)
+        
+        # Create interpolation weights
+        alphas = torch.linspace(0, 1, steps, device=device)
+        
+        # Interpolate latent vectors
+        images = []
+        for alpha in alphas:
+            z = (1 - alpha) * z1 + alpha * z2
+            
+            # Also interpolate labels (one-hot)
+            label1 = torch.tensor([class1], device=device)
+            label2 = torch.tensor([class2], device=device)
+            
+            # Decode with interpolated label (use closer class)
+            label = label1 if alpha < 0.5 else label2
+            img = self.decode(z, label).view(1, 1, 28, 28)
+            images.append(img)
+        
+        return torch.cat(images, dim=0)
+
+    @torch.no_grad()
+    def interpolate_smooth(self, class1: int, class2: int, steps: int = 8, device="cpu"):
+        """Smooth interpolation using spherical linear interpolation (slerp).
+        
+        Better for high-dimensional latent spaces.
+        """
+        self.eval()
+        
+        z1 = torch.randn(1, self.latent_dim, device=device)
+        z2 = torch.randn(1, self.latent_dim, device=device)
+        
+        # Normalize for slerp
+        z1_norm = z1 / z1.norm()
+        z2_norm = z2 / z2.norm()
+        
+        # Compute angle
+        omega = torch.acos(torch.clamp((z1_norm * z2_norm).sum(), -1, 1))
+        
+        images = []
+        for i in range(steps):
+            t = i / (steps - 1)
+            
+            # Slerp
+            if omega.abs() < 1e-6:
+                z = (1 - t) * z1 + t * z2
+            else:
+                z = (torch.sin((1 - t) * omega) * z1 + torch.sin(t * omega) * z2) / torch.sin(omega)
+            
+            # Use class based on interpolation progress
+            label = torch.tensor([class1 if t < 0.5 else class2], device=device)
+            img = self.decode(z, label).view(1, 1, 28, 28)
+            images.append(img)
+        
+        return torch.cat(images, dim=0)
+
 
 # Alias
 SuperiorVAE = FashionVAE

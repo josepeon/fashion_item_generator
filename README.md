@@ -8,6 +8,15 @@
 
 A deep learning toolkit for Fashion-MNIST classification and generation. Features a CNN classifier (95.1% accuracy), conditional VAE for image generation, latent space interpolation, and style transfer capabilities.
 
+## Samples
+
+<p align="center">
+  <img src="samples/morph_T-shirt_top_Dress.gif" width="200" alt="T-shirt to Dress">
+  <img src="samples/morph_Pullover_Coat.gif" width="200" alt="Pullover to Coat">
+  <img src="samples/morph_Sneaker_Coat.gif" width="200" alt="Sneaker to Coat">
+</p>
+<p align="center"><em>Latent space interpolation between fashion classes</em></p>
+
 ## Features
 
 - **Image Classification** - CNN with 95.1% accuracy on Fashion-MNIST

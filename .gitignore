@@ -32,7 +32,6 @@ htmlcov/
 .tox/
 
 # Project specific
-weights/*.pth
 data/
 *.log
 

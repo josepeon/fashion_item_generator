@@ -33,6 +33,7 @@ htmlcov/
 
 # Project specific
 data/
+docs/
 *.log
 
 # macOS

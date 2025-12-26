@@ -117,6 +117,60 @@ class FashionVAE(nn.Module):
         return self.generate(num_samples, labels, device, temperature)
 
     @torch.no_grad()
+    def encode_image(self, image: torch.Tensor, source_class: int, device="cpu"):
+        """Encode an image to its latent representation.
+        
+        Args:
+            image: Image tensor of shape (1, 1, 28, 28) or (1, 784)
+            source_class: The class label of the source image
+            device: Device to run on
+            
+        Returns:
+            Latent vector z of shape (1, latent_dim)
+        """
+        self.eval()
+        x = image.view(1, -1).to(device)
+        label = torch.tensor([source_class], device=device)
+        mu, _ = self.encode(x, label)
+        return mu  # Use mean for deterministic encoding
+
+    @torch.no_grad()
+    def restyle(self, image: torch.Tensor, source_class: int, target_class: int, device="cpu"):
+        """Restyle an image by encoding it and decoding with a different class.
+        
+        Args:
+            image: Image tensor of shape (1, 1, 28, 28) or (1, 784)
+            source_class: Original class of the image
+            target_class: Target class to decode as
+            device: Device to run on
+            
+        Returns:
+            Restyled image tensor of shape (1, 1, 28, 28)
+        """
+        self.eval()
+        z = self.encode_image(image, source_class, device)
+        target_label = torch.tensor([target_class], device=device)
+        return self.decode(z, target_label).view(1, 1, 28, 28)
+
+    @torch.no_grad()
+    def restyle_all_classes(self, image: torch.Tensor, source_class: int, device="cpu"):
+        """Restyle an image to all 10 classes.
+        
+        Returns:
+            Tensor of shape (10, 1, 28, 28) with image restyled to each class
+        """
+        self.eval()
+        z = self.encode_image(image, source_class, device)
+        
+        images = []
+        for target_class in range(self.num_classes):
+            target_label = torch.tensor([target_class], device=device)
+            img = self.decode(z, target_label).view(1, 1, 28, 28)
+            images.append(img)
+        
+        return torch.cat(images, dim=0)
+
+    @torch.no_grad()
     def interpolate(self, class1: int, class2: int, steps: int = 8, device="cpu"):
         """Interpolate between two classes in latent space.
         

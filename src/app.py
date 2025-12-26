@@ -91,7 +91,7 @@ def main():
             st.write(f"{i}: {name}")
     
     # Tabs for different features
-    tab1, tab2, tab3 = st.tabs(["📤 Classify", "🎨 Generate", "🔄 Interpolate"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📤 Classify", "🎨 Generate", "🔄 Interpolate", "🎭 Style Transfer"])
     
     # Tab 1: Classification
     with tab1:
@@ -231,6 +231,71 @@ def main():
                     st.warning("VAE not loaded - cannot interpolate")
             else:
                 st.info("👈 Select two classes and click Interpolate")
+    
+    # Tab 4: Style Transfer
+    with tab4:
+        st.markdown("Upload an image and see it restyled as different fashion items.")
+        
+        col1, col2 = st.columns([1, 2])
+        
+        with col1:
+            style_upload = st.file_uploader(
+                "Upload a fashion item",
+                type=["png", "jpg", "jpeg"],
+                key="style_upload"
+            )
+            
+            if style_upload is not None and cnn is not None:
+                # Auto-detect class
+                image = Image.open(style_upload)
+                tensor = preprocess_image(image).to(device)
+                with torch.no_grad():
+                    logits = cnn(tensor)
+                    probs = torch.softmax(logits, dim=1).squeeze()
+                    detected_class = probs.argmax().item()
+                
+                st.image(image, width=150, caption="Uploaded")
+                st.write(f"**Detected:** {CLASS_NAMES[detected_class]}")
+                
+                # Option to override detected class
+                source_class = st.selectbox(
+                    "Source class (auto-detected):",
+                    CLASS_NAMES,
+                    index=detected_class,
+                    key="style_source"
+                )
+                
+                restyle_btn = st.button("Restyle to All Classes", type="primary", key="restyle_btn")
+        
+        with col2:
+            if style_upload is not None and vae is not None:
+                if restyle_btn or 'last_style_upload' in st.session_state:
+                    image = Image.open(style_upload)
+                    tensor = preprocess_image(image).to(device)
+                    source_idx = CLASS_NAMES.index(source_class)
+                    
+                    st.subheader("Restyled Versions")
+                    
+                    with torch.no_grad():
+                        restyled = vae.restyle_all_classes(tensor, source_idx, device)
+                    
+                    # Display in 2 rows of 5
+                    for row in range(2):
+                        cols = st.columns(5)
+                        for i, col in enumerate(cols):
+                            idx = row * 5 + i
+                            img = (restyled[idx].squeeze().cpu().numpy() * 255).astype(np.uint8)
+                            # Highlight if it's the source class
+                            caption = CLASS_NAMES[idx]
+                            if idx == source_idx:
+                                caption = f"**{caption}** (original)"
+                            col.image(img, width=90, caption=caption)
+                else:
+                    st.info("👈 Upload an image and click 'Restyle to All Classes'")
+            elif style_upload is None:
+                st.info("👈 Upload an image to see style transfer")
+            else:
+                st.warning("VAE not loaded - cannot restyle")
 
 
 if __name__ == "__main__":

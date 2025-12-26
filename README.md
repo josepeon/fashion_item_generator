@@ -1,12 +1,14 @@
 # Fashion Item Generator
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://fashionitem.streamlit.app/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch 2.0+](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B.svg)](https://streamlit.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A deep learning toolkit for Fashion-MNIST classification and generation. Features a CNN classifier (95.1% accuracy), conditional VAE for image generation, latent space interpolation, and style transfer capabilities.
+
+**Live Demo:** [fashionitem.streamlit.app](https://fashionitem.streamlit.app/)
 
 ## Samples
 

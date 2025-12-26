@@ -38,8 +38,8 @@ data/
 # macOS
 .DS_Store
 
-# Streamlit
-.streamlit/
+# Streamlit (keep config, ignore cache)
+.streamlit/secrets.toml
 
 # Results (keep structure, ignore outputs)
 results/*.png

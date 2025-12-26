@@ -69,10 +69,10 @@ cd src && streamlit run app.py --server.port 8501
 ```
 
 Open [localhost:8501](http://localhost:8501) for the interactive demo with:
-- 📤 **Classify** - Upload an image for classification
-- 🎨 **Generate** - Create new images by class
-- 🔄 **Interpolate** - Morph between two classes with GIF export
-- 🎭 **Style Transfer** - Restyle images to any category
+- **Classify** - Upload an image for classification
+- **Generate** - Create new images by class
+- **Interpolate** - Morph between two classes with GIF export
+- **Style Transfer** - Restyle images to any category
 
 ### REST API
 

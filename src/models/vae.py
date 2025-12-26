@@ -91,6 +91,11 @@ class FashionVAE(nn.Module):
             z = torch.cat([z, onehot], dim=1)
         return self.decoder(z)
 
+    def decode_soft(self, z, soft_labels):
+        """Decode with soft (interpolated) labels instead of one-hot."""
+        z = torch.cat([z, soft_labels], dim=1)
+        return self.decoder(z)
+
     def forward(self, x, labels=None) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         mu, logvar = self.encode(x, labels)
         z = self.reparameterize(mu, logvar)
@@ -130,21 +135,19 @@ class FashionVAE(nn.Module):
         z1 = torch.randn(1, self.latent_dim, device=device)
         z2 = torch.randn(1, self.latent_dim, device=device)
         
+        # Create one-hot labels
+        onehot1 = F.one_hot(torch.tensor([class1], device=device), self.num_classes).float()
+        onehot2 = F.one_hot(torch.tensor([class2], device=device), self.num_classes).float()
+        
         # Create interpolation weights
         alphas = torch.linspace(0, 1, steps, device=device)
         
-        # Interpolate latent vectors
+        # Interpolate latent vectors AND labels smoothly
         images = []
         for alpha in alphas:
             z = (1 - alpha) * z1 + alpha * z2
-            
-            # Also interpolate labels (one-hot)
-            label1 = torch.tensor([class1], device=device)
-            label2 = torch.tensor([class2], device=device)
-            
-            # Decode with interpolated label (use closer class)
-            label = label1 if alpha < 0.5 else label2
-            img = self.decode(z, label).view(1, 1, 28, 28)
+            soft_label = (1 - alpha) * onehot1 + alpha * onehot2
+            img = self.decode_soft(z, soft_label).view(1, 1, 28, 28)
             images.append(img)
         
         return torch.cat(images, dim=0)
@@ -153,12 +156,16 @@ class FashionVAE(nn.Module):
     def interpolate_smooth(self, class1: int, class2: int, steps: int = 8, device="cpu"):
         """Smooth interpolation using spherical linear interpolation (slerp).
         
-        Better for high-dimensional latent spaces.
+        Blends both latent vectors and class labels for seamless transitions.
         """
         self.eval()
         
         z1 = torch.randn(1, self.latent_dim, device=device)
         z2 = torch.randn(1, self.latent_dim, device=device)
+        
+        # Create one-hot labels
+        onehot1 = F.one_hot(torch.tensor([class1], device=device), self.num_classes).float()
+        onehot2 = F.one_hot(torch.tensor([class2], device=device), self.num_classes).float()
         
         # Normalize for slerp
         z1_norm = z1 / z1.norm()
@@ -171,15 +178,18 @@ class FashionVAE(nn.Module):
         for i in range(steps):
             t = i / (steps - 1)
             
-            # Slerp
+            # Slerp for latent vector
             if omega.abs() < 1e-6:
                 z = (1 - t) * z1 + t * z2
             else:
                 z = (torch.sin((1 - t) * omega) * z1 + torch.sin(t * omega) * z2) / torch.sin(omega)
             
-            # Use class based on interpolation progress
-            label = torch.tensor([class1 if t < 0.5 else class2], device=device)
-            img = self.decode(z, label).view(1, 1, 28, 28)
+            # Smooth label blending (use smoothstep for even smoother transition)
+            # smoothstep: 3t^2 - 2t^3
+            t_smooth = t * t * (3 - 2 * t)
+            soft_label = (1 - t_smooth) * onehot1 + t_smooth * onehot2
+            
+            img = self.decode_soft(z, soft_label).view(1, 1, 28, 28)
             images.append(img)
         
         return torch.cat(images, dim=0)

@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 """Evaluate Fashion-MNIST CNN classifier."""
 
+from pathlib import Path
+
 import torch
 import torch.nn.functional as F
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
 from models import FashionCNN
+
+# Paths
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+WEIGHTS_DIR = PROJECT_ROOT / "weights"
+DATA_DIR = PROJECT_ROOT / "data"
 
 CLASS_NAMES = [
     "T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
@@ -22,7 +29,9 @@ def get_device() -> torch.device:
     return torch.device("cpu")
 
 
-def load_model(path: str = "weights/cnn.pth") -> FashionCNN:
+def load_model(path: Path = None) -> FashionCNN:
+    if path is None:
+        path = WEIGHTS_DIR / "cnn.pth"
     device = get_device()
     model = FashionCNN().to(device)
     model.load_state_dict(torch.load(path, map_location=device, weights_only=True))
@@ -73,7 +82,7 @@ def main():
         transforms.Normalize((0.2860,), (0.3530,)),
     ])
     test_dataset = datasets.FashionMNIST(
-        root="./data", train=False, download=True, transform=test_transform
+        root=DATA_DIR, train=False, download=True, transform=test_transform
     )
     test_loader = DataLoader(test_dataset, batch_size=512, shuffle=False, num_workers=4)
 

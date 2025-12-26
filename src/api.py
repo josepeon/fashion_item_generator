@@ -18,7 +18,7 @@ from pydantic import BaseModel, Field
 from models import FashionCNN, FashionVAE
 
 # Get project root (parent of src/)
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 WEIGHTS_DIR = PROJECT_ROOT / "weights"
 
 # Class names

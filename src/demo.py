@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 """Quick demo of Fashion-MNIST models."""
 
+from pathlib import Path
+
 import torch
 import matplotlib.pyplot as plt
 from torchvision import datasets, transforms
 
 from models import FashionCNN, FashionVAE
+
+# Paths
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+WEIGHTS_DIR = PROJECT_ROOT / "weights"
+DATA_DIR = PROJECT_ROOT / "data"
+RESULTS_DIR = PROJECT_ROOT / "results"
 
 CLASS_NAMES = [
     "T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
@@ -25,14 +33,14 @@ def demo_cnn():
     """Demo CNN classifier."""
     device = get_device()
     model = FashionCNN().to(device)
-    model.load_state_dict(torch.load("weights/cnn.pth", map_location=device, weights_only=True))
+    model.load_state_dict(torch.load(WEIGHTS_DIR / "cnn.pth", map_location=device, weights_only=True))
     model.eval()
 
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.2860,), (0.3530,)),
     ])
-    dataset = datasets.FashionMNIST(root="./data", train=False, transform=transform)
+    dataset = datasets.FashionMNIST(root=DATA_DIR, train=False, transform=transform)
 
     fig, axes = plt.subplots(2, 5, figsize=(12, 5))
     indices = torch.randperm(len(dataset))[:10]
@@ -56,16 +64,16 @@ def demo_cnn():
 
     plt.suptitle("CNN Classifier Demo", fontsize=12)
     plt.tight_layout()
-    plt.savefig("results/demo_cnn.png", dpi=150)
+    plt.savefig(RESULTS_DIR / "demo_cnn.png", dpi=150)
     plt.close()
-    print("Saved: results/demo_cnn.png")
+    print(f"Saved: {RESULTS_DIR / 'demo_cnn.png'}")
 
 
 def demo_vae():
     """Demo VAE generator."""
     device = get_device()
     model = FashionVAE(latent_dim=32, conditional=True).to(device)
-    model.load_state_dict(torch.load("weights/vae.pth", map_location=device, weights_only=True))
+    model.load_state_dict(torch.load(WEIGHTS_DIR / "vae.pth", map_location=device, weights_only=True))
     model.eval()
 
     fig, axes = plt.subplots(2, 5, figsize=(10, 4))
@@ -80,9 +88,9 @@ def demo_vae():
 
     plt.suptitle("VAE Generator Demo", fontsize=12)
     plt.tight_layout()
-    plt.savefig("results/demo_vae.png", dpi=150)
+    plt.savefig(RESULTS_DIR / "demo_vae.png", dpi=150)
     plt.close()
-    print("Saved: results/demo_vae.png")
+    print(f"Saved: {RESULTS_DIR / 'demo_vae.png'}")
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@
 """Evaluate Fashion-MNIST VAE generator."""
 
 import json
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -11,6 +12,12 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
 from models import FashionVAE
+
+# Paths
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+WEIGHTS_DIR = PROJECT_ROOT / "weights"
+DATA_DIR = PROJECT_ROOT / "data"
+RESULTS_DIR = PROJECT_ROOT / "results"
 
 CLASS_NAMES = [
     "T-shirt", "Trouser", "Pullover", "Dress", "Coat",
@@ -26,7 +33,9 @@ def get_device() -> torch.device:
     return torch.device("cpu")
 
 
-def load_model(path: str = "weights/vae.pth") -> FashionVAE:
+def load_model(path: Path = None) -> FashionVAE:
+    if path is None:
+        path = WEIGHTS_DIR / "vae.pth"
     device = get_device()
     model = FashionVAE(latent_dim=32, conditional=True).to(device)
     model.load_state_dict(torch.load(path, map_location=device, weights_only=True))
@@ -128,7 +137,7 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,)),
     ])
-    test_dataset = datasets.FashionMNIST(root="./data", train=False, transform=transform)
+    test_dataset = datasets.FashionMNIST(root=DATA_DIR, train=False, transform=transform)
     test_loader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 
     # Metrics
@@ -154,8 +163,8 @@ def main():
     print(f"\nGrade: {grade} (score: {score:.3f})")
 
     # Save visualizations
-    save_reconstruction_samples(model, test_loader, device, "results/vae_recon.png")
-    save_generation_samples(model, device, "results/vae_gen.png")
+    save_reconstruction_samples(model, test_loader, device, RESULTS_DIR / "vae_recon.png")
+    save_generation_samples(model, device, RESULTS_DIR / "vae_gen.png")
 
     # Save results
     results = {
@@ -167,10 +176,10 @@ def main():
         "score": score,
         "grade": grade,
     }
-    with open("results/vae_eval.json", "w") as f:
+    with open(RESULTS_DIR / "vae_eval.json", "w") as f:
         json.dump(results, f, indent=2)
 
-    print("\nResults saved to results/")
+    print(f"\nResults saved to {RESULTS_DIR}/")
 
 
 if __name__ == "__main__":

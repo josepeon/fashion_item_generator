@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Train Fashion-MNIST CNN classifier."""
 
+from pathlib import Path
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -9,6 +11,11 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
 from models import FashionCNN
+
+# Paths
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+WEIGHTS_DIR = PROJECT_ROOT / "weights"
+DATA_DIR = PROJECT_ROOT / "data"
 
 
 def get_device():
@@ -39,8 +46,8 @@ def train(epochs: int = 150, batch_size: int = 64, lr: float = 1e-3):
         transforms.Normalize((0.2860,), (0.3530,)),
     ])
 
-    train_data = datasets.FashionMNIST("./data", train=True, download=True, transform=train_transform)
-    test_data = datasets.FashionMNIST("./data", train=False, transform=test_transform)
+    train_data = datasets.FashionMNIST(DATA_DIR, train=True, download=True, transform=train_transform)
+    test_data = datasets.FashionMNIST(DATA_DIR, train=False, transform=test_transform)
 
     train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=4, drop_last=True)
     test_loader = DataLoader(test_data, batch_size=256, shuffle=False, num_workers=4)
@@ -82,7 +89,7 @@ def train(epochs: int = 150, batch_size: int = 64, lr: float = 1e-3):
 
         if acc > best_acc:
             best_acc = acc
-            torch.save(model.state_dict(), "weights/cnn.pth")
+            torch.save(model.state_dict(), WEIGHTS_DIR / "cnn.pth")
 
     print(f"\nBest accuracy: {best_acc:.2f}%")
     return model

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Train Fashion-MNIST VAE generator."""
 
+from pathlib import Path
+
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
@@ -9,6 +11,11 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
 from models import FashionVAE
+
+# Paths
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+WEIGHTS_DIR = PROJECT_ROOT / "weights"
+DATA_DIR = PROJECT_ROOT / "data"
 
 
 def get_device():
@@ -31,8 +38,8 @@ def train(epochs: int = 150, latent_dim: int = 32, batch_size: int = 128, lr: fl
         transforms.Normalize((0.5,), (0.5,)),
     ])
 
-    train_data = datasets.FashionMNIST("./data", train=True, download=True, transform=transform)
-    test_data = datasets.FashionMNIST("./data", train=False, transform=transform)
+    train_data = datasets.FashionMNIST(DATA_DIR, train=True, download=True, transform=transform)
+    test_data = datasets.FashionMNIST(DATA_DIR, train=False, transform=transform)
 
     train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=4)
     test_loader = DataLoader(test_data, batch_size=256, shuffle=False, num_workers=4)
@@ -75,7 +82,7 @@ def train(epochs: int = 150, latent_dim: int = 32, batch_size: int = 128, lr: fl
 
         if val_loss < best_loss:
             best_loss = val_loss
-            torch.save(model.state_dict(), "weights/vae.pth")
+            torch.save(model.state_dict(), WEIGHTS_DIR / "vae.pth")
 
     print(f"\nBest loss: {best_loss:.3f}")
     return model

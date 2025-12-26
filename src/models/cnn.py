@@ -4,7 +4,7 @@ import torch.nn as nn
 
 
 class FashionCNN(nn.Module):
-    """Efficient CNN for Fashion-MNIST (95%+ accuracy, ~2.3M params)."""
+    """Efficient CNN for Fashion-MNIST (95%+ accuracy, ~1.2M params)."""
 
     def __init__(self, num_classes: int = 10):
         super().__init__()
